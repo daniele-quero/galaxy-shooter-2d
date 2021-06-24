@@ -56,7 +56,9 @@ public class Enemy : MonoBehaviour
         }
         else if (collision.tag == "Player")
         {
-            GameObject.Destroy(this.gameObject);
+            Player player = collision.GetComponent<Player>();
+            if (player != null)
+                player.Damage(1);
         }
     }
 }
