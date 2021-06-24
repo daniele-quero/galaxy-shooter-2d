@@ -10,7 +10,6 @@ public class Laser : MonoBehaviour
 
     private CameraBounds _cameraBounds = null;
 
-    [SerializeField]
     private GameObject _laserContainer = null;
     void Start()
     {
