@@ -26,7 +26,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
 
-    // Start is called before the first frame update
+    public int Lives { get => _lives; set => _lives = value; }
+
     void Start()
     {
         GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
@@ -38,7 +39,6 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         CheckBounds();

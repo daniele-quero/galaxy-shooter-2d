@@ -10,19 +10,15 @@ public class Enemy : MonoBehaviour
     private CameraBounds _cameraBounds = null;
     private SpriteRenderer _spriteRenderer;
     private Vector3 _respawnPosition = new Vector3(0, 0, 0);
+    private SpawnLimit _spawnLimit = new SpawnLimit();
+
+    public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
 
     void Start()
     {
-        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
-        if (camObj != null)
-            _cameraBounds = camObj.GetComponent<CameraBounds>();
-        else
-            Debug.LogError("Camera not found");
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();  
     }
 
-    // Update is called once per frame
     void Update()
     {
         Move();
@@ -36,13 +32,12 @@ public class Enemy : MonoBehaviour
 
     private void RespawnAtTop()
     {
-        float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
-        float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
+        _spawnLimit = SpawnLimit;
 
-        if (transform.position.y <= -_cameraBounds.CameraVisual.y - yOff)
+        if (transform.position.y <= _spawnLimit.YMin)
         {
-            _respawnPosition.y = _cameraBounds.CameraVisual.y + yOff;
-            _respawnPosition.x = Random.Range(-_cameraBounds.CameraVisual.x + xOff, _cameraBounds.CameraVisual.x - xOff);
+            _respawnPosition.y = _spawnLimit.YMax;
+            _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
             transform.position = _respawnPosition;
         }
     }
@@ -60,5 +55,22 @@ public class Enemy : MonoBehaviour
             if (player != null)
                 player.Damage(1);
         }
+    }
+
+    public SpawnLimit CalculateSpawnLimits()
+    {
+        _spriteRenderer = _spriteRenderer == null ? GetComponent<SpriteRenderer>() : _spriteRenderer;
+        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
+        if (camObj != null)
+            _cameraBounds = _cameraBounds == null ? camObj.GetComponent<CameraBounds>() : _cameraBounds;
+        else
+            Debug.LogError("Camera not found");
+        float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
+        float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
+        _spawnLimit.YMax = _cameraBounds.CameraVisual.y + yOff;
+        _spawnLimit.YMin = -_cameraBounds.CameraVisual.y - yOff;
+        _spawnLimit.XMin = -_cameraBounds.CameraVisual.x + xOff;
+        _spawnLimit.XMax = _cameraBounds.CameraVisual.x - xOff;
+        return _spawnLimit;
     }
 }
