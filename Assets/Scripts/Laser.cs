@@ -21,7 +21,13 @@ public class Laser : MonoBehaviour
 
         _laserContainer = GameObject.FindGameObjectWithTag("laserContainer");
         if (_laserContainer != null)
-            this.transform.SetParent(_laserContainer.transform);
+        {
+            if (this.transform.parent != null)
+                this.transform.parent.transform.SetParent(_laserContainer.transform);
+            else
+                this.transform.SetParent(_laserContainer.transform);
+        }
+            
     }
 
     

@@ -13,6 +13,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab = null;
 
+    [SerializeField]
+    private GameObject _tripleShotPrefab = null;
+
+    private GameObject _shot;
+
+    [SerializeField]
+    private bool _hasTripleShot = false;
+
     private CameraBounds _cameraBounds = null;
     private Vector3 _playerPosition = Vector3.zero;
 
@@ -77,10 +85,14 @@ public class Player : MonoBehaviour
             _laserSpawnPosition = transform.position;
             _laserSpawnPosition.y += _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
 
-            if (_laserPrefab != null && Time.time > _nextFireTime)
+            _shot = _laserPrefab;
+            if (_hasTripleShot)
+                _shot = _tripleShotPrefab;
+
+            if (_shot != null && Time.time > _nextFireTime)
             {
                 _nextFireTime = Time.time + _fireRate;
-                Instantiate(_laserPrefab, _laserSpawnPosition, Quaternion.identity);
+                Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
             }
         }
     }
