@@ -3,22 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomInterfaces;
 
-public class Enemy : MonoBehaviour, ISpawnable
+public class PowerUp : MonoBehaviour, ISpawnable
 {
     [SerializeField]
-    private float _speed = 4f;
+    private float _speed = 6f;
+    public float duration = 5f;
 
-    private CameraBounds _cameraBounds = null;
-    private SpriteRenderer _spriteRenderer;
-    private Vector3 _respawnPosition = new Vector3(0, 0, 0);
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
-
-    void Start()
-    {
-
-    }
+    private CameraBounds _cameraBounds = null;
+    private SpriteRenderer _spriteRenderer;
 
     void Update()
     {
@@ -29,33 +24,6 @@ public class Enemy : MonoBehaviour, ISpawnable
     private void Move()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
-    }
-
-    public void RespawnAtTop()
-    {
-        _spawnLimit = SpawnLimit;
-
-        if (transform.position.y <= _spawnLimit.YMin)
-        {
-            _respawnPosition.y = _spawnLimit.YMax;
-            _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
-            transform.position = _respawnPosition;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "laser")
-        {
-            GameObject.Destroy(collision.gameObject);
-            SelfDestroy();
-        }
-        else if (collision.tag == "Player")
-        {
-            Player player = collision.GetComponent<Player>();
-            if (player != null)
-                player.Damage(1);
-        }
     }
 
     public SpawnLimit CalculateSpawnLimits()
@@ -75,8 +43,37 @@ public class Enemy : MonoBehaviour, ISpawnable
         return _spawnLimit;
     }
 
+    public void RespawnAtTop()
+    {
+        _spawnLimit = SpawnLimit;
+
+        if (transform.position.y <= _spawnLimit.YMin)
+        {
+            SelfDestroy();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            Player player = collision.GetComponent<Player>();
+            if (tag == "tripleShotPowerUp")
+            {
+                Debug.Log("collected");
+                if (player != null)
+                    player.ActivatePowerUp(this);
+            }
+        }
+        if (collision.tag == "laser")
+            GameObject.Destroy(collision.gameObject);
+
+        SelfDestroy();
+    }
+
     private void SelfDestroy()
     {
         GameObject.Destroy(this.gameObject);
     }
+
 }

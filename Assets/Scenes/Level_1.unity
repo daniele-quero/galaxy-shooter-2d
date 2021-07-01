@@ -221,6 +221,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &837734869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 837734870}
+  m_Layer: 0
+  m_Name: PowerUpContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &837734870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837734869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &996177594
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +566,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1352178530
 GameObject:
@@ -680,7 +710,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1841131593
 MonoBehaviour:
@@ -694,9 +724,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e1652e05935c9408fa1a8504836c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rate: 5
+  _enemyRate: 5
+  _powerUpRateMin: 4
+  _powerUpRateMax: 8
   _enemyContainer: {fileID: 1965446387}
+  _powerUpContainer: {fileID: 837734869}
   _enemyPrefab: {fileID: 4130679818690967717, guid: b106895468efadf4d8c6d847cae99273, type: 3}
+  _powerUpPrefabs:
+  - {fileID: 7187496278690652434, guid: 696a340ea29cb8641aaa9c8060810c5c, type: 3}
 --- !u!1 &1965446387
 GameObject:
   m_ObjectHideFlags: 0

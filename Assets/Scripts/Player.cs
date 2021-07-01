@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     public int Lives { get => _lives; set => _lives = value; }
+    public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
 
     void Start()
     {
@@ -102,5 +103,21 @@ public class Player : MonoBehaviour
         _lives -= dmg;
         if (_lives < 0)
             GameObject.Destroy(this.gameObject);
+    }
+
+    private IEnumerator PowerUpCooldown(PowerUp powerup)
+    {
+        if (powerup.tag == "tripleShotPowerUp")
+        {
+            _hasTripleShot = true;
+            yield return new WaitForSeconds(powerup.duration);
+            _hasTripleShot = false;
+        }
+ 
+    }
+
+    public void ActivatePowerUp(PowerUp powerup)
+    {
+        StartCoroutine(PowerUpCooldown(powerup));
     }
 }
