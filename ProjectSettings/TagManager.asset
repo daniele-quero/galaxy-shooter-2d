@@ -10,6 +10,7 @@ TagManager:
   - enemyContainer
   - spawnManager
   - tripleShotPowerUp
+  - speedPowerUp
   layers:
   - Default
   - TransparentFX

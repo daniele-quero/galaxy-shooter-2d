@@ -8,6 +8,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
     [SerializeField]
     private float _speed = 6f;
     public float duration = 5f;
+    public float boost = 1.5f;
 
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
@@ -55,19 +56,22 @@ public class PowerUp : MonoBehaviour, ISpawnable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        switch (collision.tag)
         {
-            Player player = collision.GetComponent<Player>();
-            if (tag == "tripleShotPowerUp")
-            {
-                Debug.Log("collected");
+            case "Player":
+                Player player = collision.GetComponent<Player>();
+                Debug.Log(tag + " collected");
                 if (player != null)
                     player.ActivatePowerUp(this);
-            }
-        }
-        if (collision.tag == "laser")
-            GameObject.Destroy(collision.gameObject);
+                break;
+            case "laser":
+                GameObject.Destroy(collision.gameObject);
+                break;
+            default:
+                break;
 
+        }
+    
         SelfDestroy();
     }
 

@@ -5,7 +5,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4f;
+    private float _speed = 4f,
+        _defaultSpeed = 4f;
 
     [SerializeField]
     private Vector2 _direction = Vector2.zero;
@@ -107,13 +108,22 @@ public class Player : MonoBehaviour
 
     private IEnumerator PowerUpCooldown(PowerUp powerup)
     {
-        if (powerup.tag == "tripleShotPowerUp")
+        switch (powerup.tag)
         {
-            _hasTripleShot = true;
-            yield return new WaitForSeconds(powerup.duration);
-            _hasTripleShot = false;
+            case "tripleShotPowerUp":
+                _hasTripleShot = true;
+                yield return new WaitForSeconds(powerup.duration);
+                _hasTripleShot = false;
+                break;
+            case "speedPowerUp":
+                _speed *= powerup.boost;
+                yield return new WaitForSeconds(powerup.duration);
+                _speed = _defaultSpeed;
+                break;
+            default:
+                break;
         }
- 
+
     }
 
     public void ActivatePowerUp(PowerUp powerup)

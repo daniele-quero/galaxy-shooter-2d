@@ -350,9 +350,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+  _defaultSpeed: 10
   _direction: {x: 0, y: 0}
-  _laserPrefab: {fileID: 5761331309826155082, guid: 689bfd36fee79e444b6520e47a25ce23, type: 3}
-  _tripleShotPrefab: {fileID: 1339682491742955184, guid: 1721babafebc0d64abf9d46aa51a57f1, type: 3}
+  _laserPrefab: {fileID: 5761331309826155082, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+  _tripleShotPrefab: {fileID: 1339682491742955184, guid: a3ecfd7555a569845898d189ff94c497, type: 3}
   _hasTripleShot: 0
   _fireRate: 0.2
   _lives: 3
@@ -691,7 +692,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1841131592}
   - component: {fileID: 1841131593}
-  - component: {fileID: 1841131595}
   - component: {fileID: 1841131594}
   m_Layer: 0
   m_Name: SpawnManager
@@ -731,9 +731,10 @@ MonoBehaviour:
   _powerUpRateMax: 8
   _enemyContainer: {fileID: 1965446387}
   _powerUpContainer: {fileID: 837734869}
-  _enemyPrefab: {fileID: 4130679818690967717, guid: b106895468efadf4d8c6d847cae99273, type: 3}
+  _enemyPrefab: {fileID: 4130679818690967717, guid: 5a724cd844e43b64087621434b8dcb02, type: 3}
   _powerUpPrefabs:
-  - {fileID: 7187496278690652434, guid: 696a340ea29cb8641aaa9c8060810c5c, type: 3}
+  - {fileID: 7187496278690652434, guid: 23fe3ae6d10fc3f48ba6c72f629942cf, type: 3}
+  - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}
 --- !u!212 &1841131594
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -786,25 +787,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &1841131595
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841131591}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b1e1eaef8d85dd34fb80bcd35e3c25fd, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1965446387
 GameObject:
   m_ObjectHideFlags: 0
