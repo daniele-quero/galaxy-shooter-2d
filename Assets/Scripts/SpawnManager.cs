@@ -46,7 +46,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemy(float rate)
     {
-        while (_player.Lives > 0)
+        while (_player.Lives >= 0)
         {
             _enemyPosition.y = _enemy.SpawnLimit.YMax;
             if (_enemyPosition.y > 50f)
@@ -63,7 +63,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUps(float minRate, float maxRate, GameObject powerUp)
     {
-        while (_player.Lives > 0)
+        while (_player.Lives >= 0)
         {
             float rate = Random.Range(minRate, maxRate);
             PowerUp selected = powerUp.GetComponent<PowerUp>();

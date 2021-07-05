@@ -17,10 +17,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab = null;
 
+    [SerializeField]
+    private GameObject _shieldPrefab = null;
+
     private GameObject _shot;
 
     [SerializeField]
     private bool _hasTripleShot = false;
+
+    [SerializeField]
+    private int _shields = 0;
 
     private CameraBounds _cameraBounds = null;
     private Vector3 _playerPosition = Vector3.zero;
@@ -101,9 +107,24 @@ public class Player : MonoBehaviour
 
     public void Damage(int dmg)
     {
-        _lives -= dmg;
+        if (_shields > 0)
+        {
+            _shields -= dmg;
+            if (_shields <= 0)
+                DestroyShield();
+        }
+        else
+            _lives -= dmg;
+
         if (_lives < 0)
             GameObject.Destroy(this.gameObject);
+    }
+
+    private void DestroyShield()
+    {
+        Transform shieldTr;
+        if ((shieldTr = transform.Find("Shields")) != null)
+            GameObject.Destroy(shieldTr.gameObject);
     }
 
     private IEnumerator PowerUpCooldown(PowerUp powerup)
@@ -120,10 +141,18 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(powerup.duration);
                 _speed = _defaultSpeed;
                 break;
+            case "shieldPowerUp":
+                _shields = powerup.shields;
+                GameObject shieldObj = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity);
+                shieldObj.transform.SetParent(this.transform);
+                shieldObj.name = "Shields";
+                yield return new WaitForSeconds(powerup.duration);
+                GameObject.Destroy(shieldObj);
+                _shields = 0;
+                break;
             default:
                 break;
         }
-
     }
 
     public void ActivatePowerUp(PowerUp powerup)

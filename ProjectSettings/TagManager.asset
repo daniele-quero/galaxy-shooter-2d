@@ -11,6 +11,8 @@ TagManager:
   - spawnManager
   - tripleShotPowerUp
   - speedPowerUp
+  - shieldPowerUp
+  - shields
   layers:
   - Default
   - TransparentFX

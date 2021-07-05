@@ -45,16 +45,22 @@ public class Enemy : MonoBehaviour, ISpawnable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "laser")
+        switch (collision.tag)
         {
-            GameObject.Destroy(collision.gameObject);
-            SelfDestroy();
-        }
-        else if (collision.tag == "Player")
-        {
-            Player player = collision.GetComponent<Player>();
-            if (player != null)
-                player.Damage(1);
+            case "laser":
+                GameObject.Destroy(collision.gameObject);
+                SelfDestroy();
+                break;
+            case "Player":
+                Player player = collision.GetComponent<Player>();
+                if (player != null)
+                    player.Damage(1);
+                break;
+            case "shields":
+                SelfDestroy();
+                break;
+            default:
+                break;
         }
     }
 
