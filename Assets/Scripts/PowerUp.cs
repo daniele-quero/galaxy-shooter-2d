@@ -10,7 +10,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
     public float duration = 5f;
     public float boost = 1.5f;
     public int shields = 2;
-
+    public int scoreValue = 5;
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
@@ -60,14 +60,26 @@ public class PowerUp : MonoBehaviour, ISpawnable
         switch (collision.tag)
         {
             case "Player":
-                Player player = collision.GetComponent<Player>();
-                Debug.Log(tag + " collected");
-                if (player != null)
-                    player.ActivatePowerUp(this);
-                break;
+                {
+                    Player player = collision.GetComponent<Player>();
+                    Debug.Log(tag + " collected");
+                    if (player != null)
+                        player.ActivatePowerUp(this);
+                    break;
+                }
             case "laser":
-                GameObject.Destroy(collision.gameObject);
-                break;
+                {
+                    GameObject.Destroy(collision.gameObject);
+                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    if (player != null)
+                    {
+                        player.Score += scoreValue;
+                        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
+                        if (ui != null)
+                            ui.UpdateScoreText(player.Score);
+                    }
+                    break;
+                }
             default:
                 break;
 

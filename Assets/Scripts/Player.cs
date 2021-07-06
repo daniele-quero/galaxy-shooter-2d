@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
 
+    public int Score = 0;
+
     public int Lives { get => _lives; set => _lives = value; }
     public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
 
@@ -118,6 +120,10 @@ public class Player : MonoBehaviour
 
         if (_lives < 0)
             GameObject.Destroy(this.gameObject);
+
+        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (ui != null)
+            ui.UpdateLivesDisplay(_lives);
     }
 
     private void DestroyShield()

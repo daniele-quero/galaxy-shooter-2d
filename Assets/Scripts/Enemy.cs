@@ -13,6 +13,9 @@ public class Enemy : MonoBehaviour, ISpawnable
     private Vector3 _respawnPosition = new Vector3(0, 0, 0);
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
+    [SerializeField]
+    private int _scoreValue = 10;
+
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
 
     void Start()
@@ -48,14 +51,26 @@ public class Enemy : MonoBehaviour, ISpawnable
         switch (collision.tag)
         {
             case "laser":
-                GameObject.Destroy(collision.gameObject);
-                SelfDestroy();
-                break;
+                {
+                    GameObject.Destroy(collision.gameObject);
+                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    if (player != null)
+                    {
+                        player.Score += _scoreValue;
+                        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
+                        if (ui != null)
+                            ui.UpdateScoreText(player.Score);
+                    }
+                    SelfDestroy();
+                    break;
+                }
             case "Player":
-                Player player = collision.GetComponent<Player>();
-                if (player != null)
-                    player.Damage(1);
-                break;
+                {
+                    Player player = collision.GetComponent<Player>();
+                    if (player != null)
+                        player.Damage(1);
+                    break;
+                }
             case "shields":
                 SelfDestroy();
                 break;
