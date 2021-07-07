@@ -70,7 +70,9 @@ public class PowerUp : MonoBehaviour, ISpawnable
             case "laser":
                 {
                     GameObject.Destroy(collision.gameObject);
-                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    Player player = GameObject.FindGameObjectWithTag("Player") != null
+                        ? GameObject.FindGameObjectWithTag("Player").GetComponent<Player>()
+                        : null;
                     if (player != null)
                     {
                         player.Score += scoreValue;
@@ -84,7 +86,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
                 break;
 
         }
-    
+
         SelfDestroy();
     }
 
