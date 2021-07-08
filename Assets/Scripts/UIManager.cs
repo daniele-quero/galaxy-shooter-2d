@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     private Text _score;
+    private Text _level;
     private Text _gameover;
     private Text _restart;
     private Image _livesDisplay;
@@ -35,6 +36,14 @@ public class UIManager : MonoBehaviour
 
         _restart.enabled = false;
 
+        _level = transform.Find("Level").GetComponent<Text>();
+        if (_level == null)
+            Debug.LogError("No Level Text found");
+
+        _level.enabled = true;
+
+        StartCoroutine(FadeLevelText());
+
         _livesDisplay = transform.Find("LivesDisplay").GetComponent<Image>();
         if (_livesDisplay == null)
             Debug.LogError("No Lives Sprite found");
@@ -46,6 +55,20 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.LoadScene("Level_1");
         }
+    }
+
+    private IEnumerator FadeLevelText()
+    {
+        Color textColor = _level.color;
+       for(float a = 1; a >= 0; a -= 0.025f)
+        {
+            Color newColor = new Color(textColor.r, textColor.g, textColor.b, a);
+            _level.color = newColor;
+            yield return new WaitForSeconds(0.025f);
+        }
+
+        _level.enabled = false;
+
     }
 
     public void UpdateScoreText(int score)
