@@ -40,6 +40,9 @@ public class UIManager : MonoBehaviour
         if (_level == null)
             Debug.LogError("No Level Text found");
 
+        _level.text = "Level " + SceneManager.GetActiveScene().buildIndex;
+        _level.rectTransform.sizeDelta = new Vector2(_level.rectTransform.sizeDelta.x / 7f * _level.text.Length, 
+            _level.rectTransform.sizeDelta.y);
         _level.enabled = true;
 
         StartCoroutine(FadeLevelText());
@@ -60,14 +63,14 @@ public class UIManager : MonoBehaviour
     private IEnumerator FadeLevelText()
     {
         Color textColor = _level.color;
-       for(float a = 1; a >= 0; a -= 0.025f)
+       for(float a = 1; a >= 0; a -= 0.02f)
         {
             Color newColor = new Color(textColor.r, textColor.g, textColor.b, a);
             _level.color = newColor;
             yield return new WaitForSeconds(0.025f);
         }
 
-        _level.enabled = false;
+        GameObject.Destroy(_level.gameObject);
 
     }
 
