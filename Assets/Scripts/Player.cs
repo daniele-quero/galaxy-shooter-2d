@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         if (camObj != null)
             _cameraBounds = camObj.GetComponent<CameraBounds>();
         else
-            Debug.LogError("Camera not found");
+            Utilities.LogNullGrabbed("Camera");
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -124,6 +124,8 @@ public class Player : MonoBehaviour
         UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (ui != null)
             ui.UpdateLivesDisplay(_lives);
+        else
+            Utilities.LogNullGrabbed("UIManager");
     }
 
     private void DestroyShield()

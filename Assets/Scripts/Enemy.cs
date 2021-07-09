@@ -18,9 +18,12 @@ public class Enemy : MonoBehaviour, ISpawnable
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
 
+    Animator _animator;
+
     void Start()
     {
-
+        _animator = GetComponent<Animator>();
+        Utilities.CheckNullGrabbed(_animator, "Animator");
     }
 
     void Update()
@@ -38,7 +41,7 @@ public class Enemy : MonoBehaviour, ISpawnable
     {
         _spawnLimit = SpawnLimit;
 
-        if (transform.position.y <= _spawnLimit.YMin)
+        if (transform.position.y <= _spawnLimit.YMin && _animator.GetCurrentAnimatorStateInfo(0).IsName("enemy_ok"))
         {
             _respawnPosition.y = _spawnLimit.YMax;
             _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
@@ -61,7 +64,8 @@ public class Enemy : MonoBehaviour, ISpawnable
                         if (ui != null)
                             ui.UpdateScoreText(player.Score);
                     }
-                    SelfDestroy();
+
+                    EnemyDeath();
                     break;
                 }
             case "Player":
@@ -72,32 +76,46 @@ public class Enemy : MonoBehaviour, ISpawnable
                     break;
                 }
             case "shields":
-                SelfDestroy();
+                EnemyDeath();
                 break;
             default:
                 break;
         }
     }
 
+    public void EnemyDeath()
+    {
+        _animator.SetTrigger("onEnemyDeath");
+        AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        GetComponent<Collider2D>().enabled = false;
+        SelfDestroy(clips[0].length);
+    }
+
     public SpawnLimit CalculateSpawnLimits()
     {
-        _spriteRenderer = _spriteRenderer == null ? GetComponent<SpriteRenderer>() : _spriteRenderer;
-        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
-        if (camObj != null)
-            _cameraBounds = _cameraBounds == null ? camObj.GetComponent<CameraBounds>() : _cameraBounds;
-        else
-            Debug.LogError("Camera not found");
-        float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
-        float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
-        _spawnLimit.YMax = _cameraBounds.CameraVisual.y + yOff;
-        _spawnLimit.YMin = -_cameraBounds.CameraVisual.y - yOff;
-        _spawnLimit.XMin = -_cameraBounds.CameraVisual.x + xOff;
-        _spawnLimit.XMax = _cameraBounds.CameraVisual.x - xOff;
-        return _spawnLimit;
+        //_spriteRenderer = _spriteRenderer == null ? GetComponent<SpriteRenderer>() : _spriteRenderer;
+        //GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
+        //if (camObj != null)
+        //    _cameraBounds = _cameraBounds == null ? camObj.GetComponent<CameraBounds>() : _cameraBounds;
+        //else
+        //    Utilities.LogNullGrabbed("Camera");
+
+        //float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
+        //float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
+        //_spawnLimit.YMax = _cameraBounds.CameraVisual.y + yOff;
+        //_spawnLimit.YMin = -_cameraBounds.CameraVisual.y - yOff;
+        //_spawnLimit.XMin = -_cameraBounds.CameraVisual.x + xOff;
+        //_spawnLimit.XMax = _cameraBounds.CameraVisual.x - xOff;
+        return _spawnLimit.Calculate(gameObject, _spriteRenderer, _cameraBounds);
     }
 
     private void SelfDestroy()
     {
         GameObject.Destroy(this.gameObject);
+    }
+
+    private void SelfDestroy(float time)
+    {
+        GameObject.Destroy(this.gameObject, time);
     }
 }

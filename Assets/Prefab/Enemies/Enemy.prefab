@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 388047104}
   - component: {fileID: -1203396979730273308}
   - component: {fileID: 4363347179537445224}
+  - component: {fileID: 5277363092231711897}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: laser
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 6.5
+  _scoreValue: 10
 --- !u!50 &388047104
 Rigidbody2D:
   serializedVersion: 4
@@ -222,3 +224,22 @@ PolygonCollider2D:
       - {x: 0.37, y: 0.63}
       - {x: 0.35999998, y: 0.62}
       - {x: 0.35999998, y: 0.63}
+--- !u!95 &5277363092231711897
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130679818690967717}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fddb48350429f3c4e922b15d41702828, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

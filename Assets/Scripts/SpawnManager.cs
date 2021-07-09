@@ -25,13 +25,10 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        if (_player == null)
-            Debug.LogError("No player found");
-
+        Utilities.CheckNullGrabbed(_player, "Player Script");
 
         _enemy = _enemyPrefab.GetComponent<Enemy>();
-        if (_enemy == null)
-            Debug.LogError("No Enemy Script found");
+        Utilities.CheckNullGrabbed(_enemy, "Enemy Script");
 
         StartCoroutine(SpawnEnemy(_enemyRate));
 

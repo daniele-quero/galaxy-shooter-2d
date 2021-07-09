@@ -8,13 +8,10 @@ public class MainMenuManager : MonoBehaviour
 {
 
     private Button _newGameButton;
-
     void Start()
     {
         _newGameButton = transform.Find("NewGameButton").GetComponent<Button>();
-        if (_newGameButton == null)
-            Debug.Log("No New Game Button found");
-
+        Utilities.CheckNullGrabbed(_newGameButton, "New Game Button");
         _newGameButton.onClick.AddListener(delegate { StartGame(); });
     }
 

@@ -21,35 +21,27 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _score = transform.Find("Score").GetComponent<Text>();
-        if (_score == null)
-            Debug.LogError("No Score Text found");
+        Utilities.CheckNullGrabbed(_score, "Score Text");
 
         _gameover = transform.Find("GameOver").GetComponent<Text>();
-        if (_gameover == null)
-            Debug.LogError("No Game Over Text found");
-
+        Utilities.CheckNullGrabbed(_gameover, "Game Over Text");
         _gameover.enabled = false;
 
         _restart = transform.Find("Restart").GetComponent<Text>();
-        if (_restart == null)
-            Debug.LogError("No Restart Text found");
-
+        Utilities.CheckNullGrabbed(_restart, "Restart Text");
         _restart.enabled = false;
 
-        _level = transform.Find("Level").GetComponent<Text>();
-        if (_level == null)
-            Debug.LogError("No Level Text found");
+        _livesDisplay = transform.Find("LivesDisplay").GetComponent<Image>();
+        Utilities.CheckNullGrabbed(_livesDisplay, "Lives Display Sprite");
 
+        _level = transform.Find("Level").GetComponent<Text>();
+        Utilities.CheckNullGrabbed(_level, "Level Text");
         _level.text = "Level " + SceneManager.GetActiveScene().buildIndex;
         _level.rectTransform.sizeDelta = new Vector2(_level.rectTransform.sizeDelta.x / 7f * _level.text.Length, 
             _level.rectTransform.sizeDelta.y);
         _level.enabled = true;
 
         StartCoroutine(FadeLevelText());
-
-        _livesDisplay = transform.Find("LivesDisplay").GetComponent<Image>();
-        if (_livesDisplay == null)
-            Debug.LogError("No Lives Sprite found");
     }
 
     private void Update()

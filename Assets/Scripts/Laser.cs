@@ -17,7 +17,7 @@ public class Laser : MonoBehaviour
         if (camObj != null)
             _cameraBounds = camObj.GetComponent<CameraBounds>();
         else
-            Debug.LogError("Camera not found");
+            Utilities.LogNullGrabbed("Camera");
 
         _laserContainer = GameObject.FindGameObjectWithTag("laserContainer");
         if (_laserContainer != null)

@@ -30,19 +30,20 @@ public class PowerUp : MonoBehaviour, ISpawnable
 
     public SpawnLimit CalculateSpawnLimits()
     {
-        _spriteRenderer = _spriteRenderer == null ? GetComponent<SpriteRenderer>() : _spriteRenderer;
-        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
-        if (camObj != null)
-            _cameraBounds = _cameraBounds == null ? camObj.GetComponent<CameraBounds>() : _cameraBounds;
-        else
-            Debug.LogError("Camera not found");
-        float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
-        float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
-        _spawnLimit.YMax = _cameraBounds.CameraVisual.y + yOff;
-        _spawnLimit.YMin = -_cameraBounds.CameraVisual.y - yOff;
-        _spawnLimit.XMin = -_cameraBounds.CameraVisual.x + xOff;
-        _spawnLimit.XMax = _cameraBounds.CameraVisual.x - xOff;
-        return _spawnLimit;
+        //_spriteRenderer = _spriteRenderer == null ? GetComponent<SpriteRenderer>() : _spriteRenderer;
+        //GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
+        //if (camObj != null)
+        //    _cameraBounds = _cameraBounds == null ? camObj.GetComponent<CameraBounds>() : _cameraBounds;
+        //else
+        //    Utilities.LogNullGrabbed("Camera");
+
+        //float yOff = _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
+        //float xOff = _spriteRenderer.sprite.rect.size.x / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.x;
+        //_spawnLimit.YMax = _cameraBounds.CameraVisual.y + yOff;
+        //_spawnLimit.YMin = -_cameraBounds.CameraVisual.y - yOff;
+        //_spawnLimit.XMin = -_cameraBounds.CameraVisual.x + xOff;
+        //_spawnLimit.XMax = _cameraBounds.CameraVisual.x - xOff;
+        return _spawnLimit.Calculate(gameObject, _spriteRenderer, _cameraBounds);
     }
 
     public void RespawnAtTop()
