@@ -58,12 +58,7 @@ public class Enemy : MonoBehaviour, ISpawnable
                     GameObject.Destroy(collision.gameObject);
                     Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
                     if (player != null)
-                    {
-                        player.Score += _scoreValue;
-                        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
-                        if (ui != null)
-                            ui.UpdateScoreText(player.Score);
-                    }
+                        player.AddScore(_scoreValue);
 
                     EnemyDeath();
                     break;

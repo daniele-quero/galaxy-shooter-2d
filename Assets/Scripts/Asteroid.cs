@@ -90,12 +90,14 @@ public class Asteroid : MonoBehaviour, ISpawnable
                 {
                     _lives--;
                     if (_lives < 0)
+                    {
                         AsteroidDestruction();
+                        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                        if (player != null)
+                            player.AddScore(_score);
+                    }
 
-                    GameObject.Destroy(collision.gameObject);
-                    Player player = collision.GetComponent<Player>();
-                    if (player != null)
-                        player.Score += _score;
+                        GameObject.Destroy(collision.gameObject);
                     _rigidBody.AddForce(Vector2.up * 0.1f);
                     break;
                 }
@@ -104,18 +106,18 @@ public class Asteroid : MonoBehaviour, ISpawnable
                     _lives--;
                     if (_lives < 0)
                         AsteroidDestruction();
-                    Debug.Log("asteroid hit enemy");
-                    Debug.Log(collision.tag);
+
                     Enemy enemy = collision.GetComponent<Enemy>();
                     if (enemy != null)
-                    {
-
                         enemy.EnemyDeath();
-                    }
+
                     break;
                 }
             case "Player":
                 {
+                    _lives--;
+                    if (_lives < 0)
+                        AsteroidDestruction();
                     Player player = collision.GetComponent<Player>();
                     if (player != null)
                         player.Damage(1);
@@ -136,7 +138,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
 
     public void RespawnAtTop()
     {
-        if (!_asteroidField.Contains(transform.position))
+        if (!_asteroidField.Contains(transform.position) && _animator.GetCurrentAnimatorStateInfo(0).IsName("asteroid_ok"))
         {
             Vector3 newPos = transform.position;
             if (transform.position.y > _asteroidField.yMax)

@@ -62,12 +62,8 @@ public class PowerUp : MonoBehaviour, ISpawnable
                         ? GameObject.FindGameObjectWithTag("Player").GetComponent<Player>()
                         : null;
                     if (player != null)
-                    {
-                        player.Score += scoreValue;
-                        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
-                        if (ui != null)
-                            ui.UpdateScoreText(player.Score);
-                    }
+                        player.AddScore(scoreValue);
+
                     break;
                 }
             default:

@@ -167,4 +167,12 @@ public class Player : MonoBehaviour
     {
         StartCoroutine(PowerUpCooldown(powerup));
     }
+
+    public void AddScore(int score)
+    {
+        Score += score;
+        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (ui != null)
+            ui.UpdateScoreText(Score);
+    }
 }
