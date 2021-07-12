@@ -88,6 +88,7 @@ public class Enemy : MonoBehaviour, ISpawnable
         _animator.SetTrigger("onEnemyDeath");
         AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
         GetComponent<Collider2D>().enabled = false;
+        _speed *= 0.75f;
         SelfDestroy(clips[0].length);
     }
 
