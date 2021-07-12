@@ -564,7 +564,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996177594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -8.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1253,6 +1253,8 @@ MonoBehaviour:
   - {fileID: 7187496278690652434, guid: 23fe3ae6d10fc3f48ba6c72f629942cf, type: 3}
   - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}
   - {fileID: 8951456139931299886, guid: 12ad55362efdbae4ebcba0be0946bc41, type: 3}
+  isSpawningEnemiesOverride: 1
+  isSpawningPowerUpsOverride: 1
 --- !u!212 &1841131594
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1335,3 +1337,76 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4071502394478514785
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: _angSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: isWaveAsteroid
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.4789634
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470669747798527591, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5492634125526921129, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_Name
+      value: Asteroid
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775040099551041996, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775040099551041996, guid: 55486588de001834cb28c291b40678f5, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 969147539
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 55486588de001834cb28c291b40678f5, type: 3}

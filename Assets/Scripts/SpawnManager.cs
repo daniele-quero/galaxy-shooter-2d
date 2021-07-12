@@ -22,6 +22,9 @@ public class SpawnManager : MonoBehaviour
     private Player _player = null;
     private Enemy _enemy = null;
 
+    public bool isSpawningEnemiesOverride = true;
+    public bool isSpawningPowerUpsOverride = true;
+
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -32,8 +35,9 @@ public class SpawnManager : MonoBehaviour
 
         StartCoroutine(SpawnEnemy(_enemyRate));
 
-        foreach(GameObject powerUp in _powerUpPrefabs)
+        foreach (GameObject powerUp in _powerUpPrefabs)
             StartCoroutine(SpawnPowerUps(_powerUpRateMin, _powerUpRateMax, powerUp));
+
     }
 
     void Update()
@@ -43,40 +47,68 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemy(float rate)
     {
-        while (_player.Lives >= 0)
+        while (isSpawningEnemiesOverride)
         {
-            _enemyPosition.y = _enemy.SpawnLimit.YMax;
-            if (_enemyPosition.y > 50f)
-                yield return null;
+            if (ShouldSpawn(isSpawningEnemiesOverride))
+            {
+                _enemyPosition.y = _enemy.SpawnLimit.YMax;
+                if (_enemyPosition.y > 50f)
+                    yield return null;
+
+                else
+                {
+                    _enemyPosition.x = Random.Range(_enemy.SpawnLimit.XMin, _enemy.SpawnLimit.XMax);
+                    Instantiate(_enemyPrefab, _enemyPosition, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
+                    yield return new WaitForSeconds(rate);
+                }
+            }
 
             else
-            {
-                _enemyPosition.x = Random.Range(_enemy.SpawnLimit.XMin, _enemy.SpawnLimit.XMax);
-                Instantiate(_enemyPrefab, _enemyPosition, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
-                yield return new WaitForSeconds(rate);
-            }            
+                yield return null;
         }
     }
 
     IEnumerator SpawnPowerUps(float minRate, float maxRate, GameObject powerUp)
     {
-        while (_player.Lives >= 0)
+        while (isSpawningPowerUpsOverride)
         {
-            float rate = Random.Range(minRate, maxRate);
-            PowerUp selected = powerUp.GetComponent<PowerUp>();
+            if (ShouldSpawn(isSpawningPowerUpsOverride))
+            {
+                float rate = Random.Range(minRate, maxRate);
+                PowerUp selected = powerUp.GetComponent<PowerUp>();
 
-            _powerUpPosition.y = selected.SpawnLimit.YMax;
+                _powerUpPosition.y = selected.SpawnLimit.YMax;
 
-            yield return new WaitForSeconds(rate);
-            if (_powerUpPosition.y > 50f)
-                yield return null;
+                yield return new WaitForSeconds(rate);
+                if (_powerUpPosition.y > 50f)
+                    yield return null;
+
+                else
+                {
+                    _powerUpPosition.x = Random.Range(selected.SpawnLimit.XMin, selected.SpawnLimit.XMax);
+                    Instantiate(powerUp, _powerUpPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
+                }
+            }
 
             else
-            {
-                _powerUpPosition.x = Random.Range(selected.SpawnLimit.XMin, selected.SpawnLimit.XMax);
-                Instantiate(powerUp, _powerUpPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
-                
-            }
+                yield return null;
         }
+    }
+
+    private bool ShouldSpawn(bool spawnOverride)
+    {
+        return spawnOverride
+            && _player.Lives >= 0
+            && IsWaveClear();
+    }
+
+    private bool IsWaveClear()
+    {
+        foreach (GameObject asteroid in GameObject.FindGameObjectsWithTag("asteroid"))
+        {
+            if (asteroid.GetComponent<Asteroid>().isWaveAsteroid)
+                return false;
+        }
+        return true;
     }
 }
