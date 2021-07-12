@@ -7,7 +7,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
 {
     [SerializeField]
     private float _angSpeed = 10f,
-        _speed = 5;
+        _speed = 0;
 
     [SerializeField]
     private Vector3 _direction = Vector3.zero;
@@ -40,10 +40,9 @@ public class Asteroid : MonoBehaviour, ISpawnable
 
         _rigidBody.angularVelocity = _angSpeed;
         if (isFreeToMove)
-        {
             InitAsteroid();
-            Move();
-        }
+
+        Move();
     }
 
     // Update is called once per frame
@@ -97,7 +96,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
                             player.AddScore(_score);
                     }
 
-                        GameObject.Destroy(collision.gameObject);
+                    GameObject.Destroy(collision.gameObject);
                     _rigidBody.AddForce(Vector2.up * 0.1f);
                     break;
                 }
@@ -138,6 +137,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
 
     public void RespawnAtTop()
     {
+        DefineAsteroidField();
         if (!_asteroidField.Contains(transform.position) && _animator.GetCurrentAnimatorStateInfo(0).IsName("asteroid_ok"))
         {
             Vector3 newPos = transform.position;
@@ -160,8 +160,9 @@ public class Asteroid : MonoBehaviour, ISpawnable
     {
         _spawnLimit = SpawnLimit;
         Vector2 min = new Vector2(_spawnLimit.XMin, _spawnLimit.YMin);
-        Vector2 size = new Vector2(_spawnLimit.XMax - _spawnLimit.XMin + 5f, _spawnLimit.YMax - _spawnLimit.YMin + 5f);
+        Vector2 size = new Vector2(_spawnLimit.XMax - _spawnLimit.XMin + 15f, _spawnLimit.YMax - _spawnLimit.YMin + 15f);
 
         _asteroidField = new Rect(min, size);
+        Debug.Log(_asteroidField);
     }
 }
