@@ -146,8 +146,10 @@ public class Player : MonoBehaviour
                 break;
             case "speedPowerUp":
                 _speed *= powerup.boost;
+                transform.Find("Thruster").localScale = new Vector3(1, 1.8f, 1); ;
                 yield return new WaitForSeconds(powerup.duration);
                 _speed = _defaultSpeed;
+                transform.Find("Thruster").localScale = new Vector3(1, 1, 1);
                 break;
             case "shieldPowerUp":
                 _shields = powerup.shields;
