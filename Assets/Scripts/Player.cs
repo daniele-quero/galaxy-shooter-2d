@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
         }
 
         if (_lives < 0)
-            GameObject.Destroy(this.gameObject);
+            playerDeath();
 
         UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (ui != null)
@@ -131,6 +131,22 @@ public class Player : MonoBehaviour
 
         if (_lives < 2)
             SetEngineFire(x);
+    }
+
+    private void playerDeath()
+    {
+        GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
+        for (int i = 0; i < 2; i++)
+            GameObject.Destroy(engines[i]);
+
+        GameObject.Destroy(transform.Find("Thruster").gameObject);
+
+        Animator animator = GetComponent<Animator>();
+        Utilities.LogNullGrabbed("Player Animator");
+        animator.SetTrigger("onPlayerDeath");
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        GetComponent<Collider2D>().enabled = false;
+        GameObject.Destroy(this.gameObject, clips[0].length);
     }
 
     private void DestroyShield()
