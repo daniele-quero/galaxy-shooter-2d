@@ -13,6 +13,8 @@ TagManager:
   - speedPowerUp
   - shieldPowerUp
   - shields
+  - asteroid
+  - engine
   layers:
   - Default
   - TransparentFX

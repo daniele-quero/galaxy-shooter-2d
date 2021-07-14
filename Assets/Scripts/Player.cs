@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Damage(int dmg)
+    public void Damage(int dmg, float x)
     {
         if (_shields > 0)
         {
@@ -116,7 +116,9 @@ public class Player : MonoBehaviour
                 DestroyShield();
         }
         else
+        {
             _lives -= dmg;
+        }
 
         if (_lives < 0)
             GameObject.Destroy(this.gameObject);
@@ -126,6 +128,9 @@ public class Player : MonoBehaviour
             ui.UpdateLivesDisplay(_lives);
         else
             Utilities.LogNullGrabbed("UIManager");
+
+        if (_lives < 2)
+            SetEngineFire(x);
     }
 
     private void DestroyShield()
@@ -134,6 +139,21 @@ public class Player : MonoBehaviour
         if ((shieldTr = transform.Find("Shields")) != null)
             GameObject.Destroy(shieldTr.gameObject);
     }
+
+    private void SetEngineFire(float x)
+    {
+        GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
+        int hurt = 0;
+
+        if (transform.position.x < x)
+            hurt = 1;
+
+        if (engines[hurt].activeInHierarchy)
+            hurt = Utilities.Flip01(hurt);
+
+        engines[hurt].SetActive(true);
+    }
+
 
     private IEnumerator PowerUpCooldown(PowerUp powerup)
     {

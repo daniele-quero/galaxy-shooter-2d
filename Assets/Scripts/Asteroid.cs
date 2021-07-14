@@ -119,7 +119,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
                         AsteroidDestruction();
                     Player player = collision.GetComponent<Player>();
                     if (player != null)
-                        player.Damage(1);
+                        player.Damage(1, transform.position.x);
                     break;
                 }
             case "shields":
@@ -163,6 +163,5 @@ public class Asteroid : MonoBehaviour, ISpawnable
         Vector2 size = new Vector2(_spawnLimit.XMax - _spawnLimit.XMin + 15f, _spawnLimit.YMax - _spawnLimit.YMin + 15f);
 
         _asteroidField = new Rect(min, size);
-        Debug.Log(_asteroidField);
     }
 }

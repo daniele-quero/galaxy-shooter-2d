@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour, ISpawnable
                 {
                     Player player = collision.GetComponent<Player>();
                     if (player != null)
-                        player.Damage(1);
+                        player.Damage(1, transform.position.x);
                     break;
                 }
             case "shields":

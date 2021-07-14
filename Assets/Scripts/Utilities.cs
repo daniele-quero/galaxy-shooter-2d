@@ -14,4 +14,12 @@ public class Utilities
     {
         Debug.LogError("No " + name + " found");
     }
+
+    public static int Flip01(int val)
+    {
+        // 1 - 0 = 1
+        // 1 - 1 = 0
+        // flip is done
+        return 1 - val;
+    }
 }
