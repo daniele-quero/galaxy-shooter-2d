@@ -140,11 +140,11 @@ public class Player : MonoBehaviour
             GameObject.Destroy(engines[i]);
 
         GameObject.Destroy(transform.Find("Thruster").gameObject);
-
         Animator animator = GetComponent<Animator>();
-        Utilities.LogNullGrabbed("Player Animator");
-        animator.SetTrigger("onPlayerDeath");
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
+        Utilities.CheckNullGrabbed(animator, "Player Animator");
+        animator.SetTrigger("onPlayerDeath");
         GetComponent<Collider2D>().enabled = false;
         GameObject.Destroy(this.gameObject, clips[0].length);
     }
@@ -168,6 +168,7 @@ public class Player : MonoBehaviour
             hurt = Utilities.Flip01(hurt);
 
         engines[hurt].SetActive(true);
+        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(2f);
     }
 
 

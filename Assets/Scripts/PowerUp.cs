@@ -53,6 +53,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
                     Debug.Log(tag + " collected");
                     if (player != null)
                         player.ActivatePowerUp(this);
+                    SelfDestroy();
                     break;
                 }
             case "laser":
@@ -64,14 +65,14 @@ public class PowerUp : MonoBehaviour, ISpawnable
                     if (player != null)
                         player.AddScore(scoreValue);
 
+                    SelfDestroy();
                     break;
                 }
             default:
                 break;
-
         }
 
-        SelfDestroy();
+        
     }
 
     private void SelfDestroy()

@@ -73,10 +73,11 @@ public class Asteroid : MonoBehaviour, ISpawnable
 
     public void AsteroidDestruction()
     {
+        AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
         _animator.SetTrigger("onAsteroidDestruction");
         _rigidBody.velocity *= 0.75f;
-        _rigidBody.angularVelocity *= 0.75f;
-        AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        _rigidBody.angularVelocity *= 0.75f;  
         GetComponent<Collider2D>().enabled = false;
         GameObject.Destroy(this.gameObject, clips[0].length);
     }

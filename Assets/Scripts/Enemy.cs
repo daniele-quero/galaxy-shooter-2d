@@ -80,8 +80,9 @@ public class Enemy : MonoBehaviour, ISpawnable
 
     public void EnemyDeath()
     {
-        _animator.SetTrigger("onEnemyDeath");
         AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
+        _animator.SetTrigger("onEnemyDeath");
         GetComponent<Collider2D>().enabled = false;
         _speed *= 0.75f;
         SelfDestroy(clips[0].length);
