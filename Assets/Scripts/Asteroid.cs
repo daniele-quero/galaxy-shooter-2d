@@ -27,6 +27,8 @@ public class Asteroid : MonoBehaviour, ISpawnable
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidBody;
     private Rect _asteroidField;
+    private AudioSource[] _sources;
+    private Dictionary<string, AudioSource> _sounds;
 
     void Start()
     {
@@ -41,6 +43,14 @@ public class Asteroid : MonoBehaviour, ISpawnable
         _rigidBody.angularVelocity = _angSpeed;
         if (isFreeToMove)
             InitAsteroid();
+
+        _sources = GetComponents<AudioSource>();
+        _sounds = new Dictionary<string, AudioSource>()
+        {
+            ["laserDamage"] = _sources[0],
+            ["explosion"] = _sources[1],
+            ["collision"] = _sources[2]
+        };
 
         Move();
     }
@@ -79,6 +89,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
         _rigidBody.velocity *= 0.75f;
         _rigidBody.angularVelocity *= 0.75f;  
         GetComponent<Collider2D>().enabled = false;
+        _sounds["explosion"].Play();
         GameObject.Destroy(this.gameObject, clips[0].length);
     }
 
@@ -89,6 +100,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
             case "laser":
                 {
                     _lives--;
+                    _sounds["laserDamage"].Play();
                     if (_lives < 0)
                     {
                         AsteroidDestruction();
@@ -104,6 +116,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
             case "enemy":
                 {
                     _lives--;
+                    _sounds["collision"].Play();
                     if (_lives < 0)
                         AsteroidDestruction();
 
@@ -116,6 +129,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
             case "Player":
                 {
                     _lives--;
+                    _sounds["collision"].Play();
                     if (_lives < 0)
                         AsteroidDestruction();
                     Player player = collision.GetComponent<Player>();
@@ -123,8 +137,28 @@ public class Asteroid : MonoBehaviour, ISpawnable
                         player.Damage(1, transform.position.x);
                     break;
                 }
+            
+            default:
+                break;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        switch (collision.collider.tag)
+        {
+            case "asteroid":
+                _sounds["collision"].Play();
+                break;
             case "shields":
-                AsteroidDestruction();
+                _lives--;
+                _sounds["collision"].Play();
+                if (_lives < 0)
+                    AsteroidDestruction();
+
+                Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                if (player != null)
+                    player.Damage(1, transform.position.x);
                 break;
             default:
                 break;

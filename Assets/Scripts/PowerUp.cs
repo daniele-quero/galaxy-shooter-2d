@@ -16,6 +16,18 @@ public class PowerUp : MonoBehaviour, ISpawnable
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
     private CameraBounds _cameraBounds = null;
     private SpriteRenderer _spriteRenderer;
+    private AudioSource[] _sources;
+    private Dictionary<string, AudioSource> _sounds;
+
+    void Start()
+    {
+        _sources = GetComponents<AudioSource>();
+        _sounds = new Dictionary<string, AudioSource>()
+        {
+            ["collect"] = _sources[0],
+            ["destroy"] = _sources[1]
+        };
+    }
 
     void Update()
     {
@@ -47,12 +59,14 @@ public class PowerUp : MonoBehaviour, ISpawnable
     {
         switch (collision.tag)
         {
+            case "shields":
             case "Player":
                 {
                     Player player = collision.GetComponent<Player>();
-                    Debug.Log(tag + " collected");
                     if (player != null)
                         player.ActivatePowerUp(this);
+
+                    _sounds["collect"].Play();
                     SelfDestroy();
                     break;
                 }
@@ -65,6 +79,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
                     if (player != null)
                         player.AddScore(scoreValue);
 
+                    _sounds["destroy"].Play();
                     SelfDestroy();
                     break;
                 }
@@ -77,7 +92,9 @@ public class PowerUp : MonoBehaviour, ISpawnable
 
     private void SelfDestroy()
     {
-        GameObject.Destroy(this.gameObject);
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
+        GameObject.Destroy(this.gameObject,0.5f);
     }
 
 }

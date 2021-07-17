@@ -17,6 +17,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
+        GetComponent<AudioSource>().Play();
         SceneManager.LoadScene("Level_1");
     }
 

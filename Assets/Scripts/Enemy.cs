@@ -19,11 +19,19 @@ public class Enemy : MonoBehaviour, ISpawnable
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
 
     Animator _animator;
+    private AudioSource[] _sources;
+    private Dictionary<string, AudioSource> _sounds;
 
     void Start()
     {
         _animator = GetComponent<Animator>();
         Utilities.CheckNullGrabbed(_animator, "Animator");
+        _sources = GetComponents<AudioSource>();
+        _sounds = new Dictionary<string, AudioSource>()
+        {
+            ["collision"] = _sources[0],
+            ["explosion"] = _sources[1]
+        };
     }
 
     void Update()
@@ -71,6 +79,7 @@ public class Enemy : MonoBehaviour, ISpawnable
                     break;
                 }
             case "shields":
+                collision.GetComponent<AudioSource>().Play();
                 EnemyDeath();
                 break;
             default:
@@ -85,6 +94,7 @@ public class Enemy : MonoBehaviour, ISpawnable
         _animator.SetTrigger("onEnemyDeath");
         GetComponent<Collider2D>().enabled = false;
         _speed *= 0.75f;
+        _sounds["explosion"].Play();
         SelfDestroy(clips[0].length);
     }
 

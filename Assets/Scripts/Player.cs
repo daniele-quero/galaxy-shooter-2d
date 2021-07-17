@@ -43,11 +43,23 @@ public class Player : MonoBehaviour
 
     public int Score = 0;
 
+    private AudioSource[] _sources;
+    private Dictionary<string, AudioSource> _sounds;
+
     public int Lives { get => _lives; set => _lives = value; }
     public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
 
     void Start()
     {
+        _sources = GetComponents<AudioSource>();
+        _sounds = new Dictionary<string, AudioSource>()
+        {
+            ["laser"] = _sources[0],
+            ["explosion"] = _sources[1],
+            ["damage"] = _sources[2],
+            ["shieldDamage"] = _sources[3]
+        };
+
         GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
         if (camObj != null)
             _cameraBounds = camObj.GetComponent<CameraBounds>();
@@ -55,6 +67,7 @@ public class Player : MonoBehaviour
             Utilities.LogNullGrabbed("Camera");
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _sources = GetComponents<AudioSource>();
     }
 
     void Update()
@@ -103,6 +116,7 @@ public class Player : MonoBehaviour
             {
                 _nextFireTime = Time.time + _fireRate;
                 Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
+                _sounds["laser"].Play();
             }
         }
     }
@@ -112,12 +126,17 @@ public class Player : MonoBehaviour
         if (_shields > 0)
         {
             _shields -= dmg;
+            _sounds["shieldDamage"].Play();
             if (_shields <= 0)
                 DestroyShield();
         }
         else
         {
             _lives -= dmg;
+            _sounds["damage"].Play();
+
+            if (_lives < 2)
+                SetEngineFire(x);
         }
 
         if (_lives < 0)
@@ -128,9 +147,7 @@ public class Player : MonoBehaviour
             ui.UpdateLivesDisplay(_lives);
         else
             Utilities.LogNullGrabbed("UIManager");
-
-        if (_lives < 2)
-            SetEngineFire(x);
+  
     }
 
     private void playerDeath()
@@ -146,6 +163,7 @@ public class Player : MonoBehaviour
         Utilities.CheckNullGrabbed(animator, "Player Animator");
         animator.SetTrigger("onPlayerDeath");
         GetComponent<Collider2D>().enabled = false;
+        _sounds["explosion"].Play();
         GameObject.Destroy(this.gameObject, clips[0].length);
     }
 
