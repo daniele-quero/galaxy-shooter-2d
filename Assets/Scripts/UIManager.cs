@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     private Text _gameover;
     private Text _restart;
     private Image _livesDisplay;
+    private Animator _pauseAnimator;
 
     private bool _isGameOver = false;
 
@@ -37,9 +39,12 @@ public class UIManager : MonoBehaviour
         _level = transform.Find("Level").GetComponent<Text>();
         Utilities.CheckNullGrabbed(_level, "Level Text");
         _level.text = "Level " + SceneManager.GetActiveScene().buildIndex;
-        _level.rectTransform.sizeDelta = new Vector2(_level.rectTransform.sizeDelta.x / 7f * _level.text.Length, 
+        _level.rectTransform.sizeDelta = new Vector2(_level.rectTransform.sizeDelta.x / 7f * _level.text.Length,
             _level.rectTransform.sizeDelta.y);
         _level.enabled = true;
+
+        _pauseAnimator = transform.Find("PauseMenu").GetComponent<Animator>();
+        Utilities.CheckNullGrabbed(_pauseAnimator, "Pause Animator");
 
         StartCoroutine(FadeLevelText());
     }
@@ -48,14 +53,18 @@ public class UIManager : MonoBehaviour
     {
         if (_isGameOver && Input.GetKeyDown(KeyCode.R))
         {
+            PlayerPrefs.SetFloat("BkgMusic", 0);
+            PlayerPrefs.Save();
             SceneManager.LoadScene("Level_1");
         }
+
+        PauseMenu();
     }
 
     private IEnumerator FadeLevelText()
     {
         Color textColor = _level.color;
-       for(float a = 1; a >= 0; a -= 0.02f)
+        for (float a = 1; a >= 0; a -= 0.02f)
         {
             Color newColor = new Color(textColor.r, textColor.g, textColor.b, a);
             _level.color = newColor;
@@ -94,5 +103,35 @@ public class UIManager : MonoBehaviour
             _gameover.enabled = false;
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    private void PauseMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            _pauseAnimator.SetTrigger("onPause");
+
+        TogglePause();
+    }
+
+    private void TogglePause()
+    {
+        if (transform.Find("PauseMenu").GetComponent<RectTransform>().anchoredPosition.y == 0)
+            Time.timeScale = 0;
+
+        else if (transform.Find("PauseMenu").GetComponent<RectTransform>().anchoredPosition.y > 1500)
+            Time.timeScale = 1f;
+    }
+
+    public void Resume()
+    {
+        _pauseAnimator.SetTrigger("onPause");
+    }
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }
