@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CustomInterfaces;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour, ISpawnable
 {
@@ -14,13 +15,23 @@ public class Enemy : MonoBehaviour, ISpawnable
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
     [SerializeField]
-    private int _scoreValue = 10;
+    private int _scoreValue = 10,
+        _lives = 0;
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
 
     Animator _animator;
     private AudioSource[] _sources;
     private Dictionary<string, AudioSource> _sounds;
+    private LvlManager _lvlManager;
+
+    public bool defaultLevelSettings = true;
+    private bool _isShooting = false;
+    private float _laserRateMin = 3f;
+    private float _laserRateMax = 7f;
+
+    [SerializeField]
+    GameObject _laser;
 
     void Start()
     {
@@ -32,17 +43,57 @@ public class Enemy : MonoBehaviour, ISpawnable
             ["collision"] = _sources[0],
             ["explosion"] = _sources[1]
         };
+
+        _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+
+        if (defaultLevelSettings)
+        {
+            _speed = _lvlManager.enemySpeed;
+            _lives = _lvlManager.enemyLives;
+            _scoreValue = _lvlManager.enemyScore;
+            _isShooting = _lvlManager.isEnemyShooting;
+            _laserRateMin = _lvlManager.enemyLaserRate[0];
+            _laserRateMax = _lvlManager.enemyLaserRate[1];
+        }
+
+        StartCoroutine(Shoot());
     }
 
     void Update()
     {
         Move();
         RespawnAtTop();
+        Shoot();
     }
 
     private void Move()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+    }
+
+    private IEnumerator Shoot()
+    {
+        while (_isShooting)
+        {
+            yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
+          
+            if (Engage("Player"))
+            {
+                Vector2 laserSpawn = transform.position;
+                laserSpawn.y -= _spawnLimit.YOff;
+                GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
+                foreach(var las in enemyLaser.GetComponentsInChildren<Laser>())
+                    las.SetEnemyLaser();
+            }
+        }
+    }
+
+    private bool Engage(string otherTag)
+    {
+        Vector2 origin = transform.position;
+        origin.y -= _spawnLimit.YOff;
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down);
+        return hit.collider != null && hit.collider.tag == otherTag;
     }
 
     public void RespawnAtTop()
@@ -64,24 +115,54 @@ public class Enemy : MonoBehaviour, ISpawnable
             case "laser":
                 {
                     GameObject.Destroy(collision.gameObject);
-                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-                    if (player != null)
-                        player.AddScore(_scoreValue);
+                    _lives--;
+                    _sounds["collision"].Play();
+                    if(_lives < 0)
+                    {
+                        EnemyDeath();
+                        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                        if (player != null)
+                        {
+                            player.AddScore(_scoreValue);
+                            player.addKill(1);
+                        }
+                    }
 
-                    EnemyDeath();
                     break;
                 }
             case "Player":
                 {
                     Player player = collision.GetComponent<Player>();
+                    _lives--;
+                    _sounds["collision"].Play();
+                    if (_lives < 0)
+                    {
+                        EnemyDeath();
+                        if (player != null)
+                        {
+                            player.AddScore(_scoreValue);
+                            player.addKill(1);
+                        }
+                    }              
+                    
                     if (player != null)
                         player.Damage(1, transform.position.x);
+
                     break;
                 }
             case "shields":
-                collision.GetComponent<AudioSource>().Play();
-                EnemyDeath();
-                break;
+                {
+                    collision.GetComponent<AudioSource>().Play();
+                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    if (player != null)
+                    {
+                        player.AddScore(_scoreValue);
+                        player.addKill(1);
+                    }
+
+                    EnemyDeath();
+                    break;
+                }
             default:
                 break;
         }

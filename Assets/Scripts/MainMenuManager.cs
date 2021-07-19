@@ -17,6 +17,8 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
+        PlayerPrefs.SetFloat("BkgMusic", GameObject.Find("Main Camera").GetComponent<AudioSource>().time);
+        PlayerPrefs.Save();
         GetComponent<AudioSource>().Play();
         SceneManager.LoadScene("Level_1");
     }

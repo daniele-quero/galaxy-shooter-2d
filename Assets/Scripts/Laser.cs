@@ -49,4 +49,10 @@ public class Laser : MonoBehaviour
             GameObject.Destroy(this.gameObject);
         }
     }
+
+    public void SetEnemyLaser()
+    {
+        this.tag = "enemyLaser";
+        _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
+    }
 }

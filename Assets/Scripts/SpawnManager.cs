@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private float _enemyRate = 5f,
         _powerUpRateMin = 4f, _powerUpRateMax = 8f,
-        _asteroidRateMin = 4f, _asteroidRateMax = 10f;
+        _asteroidRateMin = 8f, _asteroidRateMax = 10f;
 
     [SerializeField]
     private GameObject _enemyContainer, _powerUpContainer, _asteroidContainer;
@@ -27,6 +27,7 @@ public class SpawnManager : MonoBehaviour
     public bool isSpawningEnemiesOverride = true;
     public bool isSpawningPowerUpsOverride = true;
     public bool isSpawningAsteroidsOverride = true;
+    public bool defaultLevelSettings = true;
 
     void Start()
     {
@@ -35,6 +36,16 @@ public class SpawnManager : MonoBehaviour
 
         _enemy = _enemyPrefab.GetComponent<Enemy>();
         Utilities.CheckNullGrabbed(_enemy, "Enemy Script");
+
+        if (defaultLevelSettings)
+        {
+            LvlManager lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+            _enemyRate = lvlManager.enemySpawnRate;
+            _powerUpRateMin = lvlManager.powerUpSpawnRate[0];
+            _powerUpRateMax = lvlManager.powerUpSpawnRate[1];
+            _asteroidRateMin = lvlManager.asteroidSpawnRate[0];
+            _asteroidRateMax = lvlManager.asteroidSpawnRate[1];
+        }
 
         StartCoroutine(SpawnEnemy(_enemyRate));
         StartCoroutine(SpawnAsteroids(_asteroidRateMin, _asteroidRateMax, _asteroidPrefab));

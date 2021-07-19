@@ -62,9 +62,10 @@ public class PowerUp : MonoBehaviour, ISpawnable
             case "shields":
             case "Player":
                 {
-                    Player player = collision.GetComponent<Player>();
+                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
                     if (player != null)
                         player.ActivatePowerUp(this);
+
 
                     _sounds["collect"].Play();
                     SelfDestroy();
@@ -94,7 +95,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
     {
         GetComponent<Collider2D>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
-        GameObject.Destroy(this.gameObject,0.5f);
+        GameObject.Destroy(this.gameObject,0.6f);
     }
 
 }

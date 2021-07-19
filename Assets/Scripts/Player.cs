@@ -42,10 +42,11 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     public int Score = 0;
+    public int Kills = 0;
 
     private AudioSource[] _sources;
     private Dictionary<string, AudioSource> _sounds;
-
+    private LvlManager _lvlManager;
     public int Lives { get => _lives; set => _lives = value; }
     public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
 
@@ -68,6 +69,17 @@ public class Player : MonoBehaviour
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _sources = GetComponents<AudioSource>();
+
+        _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+        //_lvlManager.LoadLevel1Data();
+
+        Score = PlayerPrefs.GetInt("Score", 0);
+        _lives = PlayerPrefs.GetInt("Lives", 3);
+
+        if (PlayerPrefs.GetInt("Engine0", 0) == 1)
+            SetEngineFire(transform.position.x - 1);
+        if (PlayerPrefs.GetInt("Engine1", 0) == 1)
+            SetEngineFire(transform.position.x + 1);
     }
 
     void Update()
@@ -137,6 +149,8 @@ public class Player : MonoBehaviour
 
             if (_lives < 2)
                 SetEngineFire(x);
+
+            PlayerPrefs.SetInt("Lives", _lives);
         }
 
         if (_lives < 0)
@@ -147,15 +161,11 @@ public class Player : MonoBehaviour
             ui.UpdateLivesDisplay(_lives);
         else
             Utilities.LogNullGrabbed("UIManager");
-  
+
     }
 
     private void playerDeath()
     {
-        GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
-        for (int i = 0; i < 2; i++)
-            GameObject.Destroy(engines[i]);
-
         GameObject.Destroy(transform.Find("Thruster").gameObject);
         Animator animator = GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
@@ -187,6 +197,9 @@ public class Player : MonoBehaviour
 
         engines[hurt].SetActive(true);
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(2f);
+
+        for (int i = 0; i < 2; i++)
+            PlayerPrefs.SetInt("Engine" + i, engines[i].activeInHierarchy ? 1 : 0);
     }
 
 
@@ -207,6 +220,9 @@ public class Player : MonoBehaviour
                 transform.Find("Thruster").localScale = new Vector3(1, 1, 1);
                 break;
             case "shieldPowerUp":
+                if(_shields > 0)
+                    GameObject.Destroy(transform.Find("Shields").gameObject);
+
                 _shields = powerup.shields;
                 GameObject shieldObj = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity);
                 shieldObj.transform.SetParent(this.transform);
@@ -228,8 +244,30 @@ public class Player : MonoBehaviour
     public void AddScore(int score)
     {
         Score += score;
+        PlayerPrefs.SetInt("Score", Kills);
         UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (ui != null)
             ui.UpdateScoreText(Score);
+    }
+
+    public void addKill(int kill)
+    {
+        Kills += kill;
+        PlayerPrefs.Save();
+        _lvlManager.checkKillCount(Kills);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "enemyLaser":
+                Damage(1, collision.transform.position.x);
+                GameObject.Destroy(collision.gameObject);
+                _sounds["damage"].Play();
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -16,6 +16,7 @@ TagManager:
   - asteroid
   - engine
   - ppv
+  - enemyLaser
   layers:
   - Default
   - TransparentFX
