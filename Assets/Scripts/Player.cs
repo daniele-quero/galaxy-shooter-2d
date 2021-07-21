@@ -175,6 +175,7 @@ public class Player : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         _sounds["explosion"].Play();
         GameObject.Destroy(this.gameObject, clips[0].length);
+        _lvlManager.PlayerPrefClear();
     }
 
     private void DestroyShield()
@@ -220,7 +221,7 @@ public class Player : MonoBehaviour
                 transform.Find("Thruster").localScale = new Vector3(1, 1, 1);
                 break;
             case "shieldPowerUp":
-                if(_shields > 0)
+                if (_shields > 0)
                     GameObject.Destroy(transform.Find("Shields").gameObject);
 
                 _shields = powerup.shields;

@@ -30,10 +30,16 @@ public class LvlManager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
+        PlayerPrefClear();
+    }
+
+    public void PlayerPrefClear()
+    {
         PlayerPrefs.DeleteKey("Engine0");
         PlayerPrefs.DeleteKey("Engine1");
         PlayerPrefs.DeleteKey("Lives");
         PlayerPrefs.DeleteKey("Score");
+        PlayerPrefs.Save();
     }
 
     public void checkKillCount(int kills)
@@ -47,6 +53,9 @@ public class LvlManager : MonoBehaviour
 
     private IEnumerator LoadNextScene(int scene)
     {
+        GameObject.Destroy(GameObject.Find("Laser Container"));
+        GameObject.Destroy(GameObject.Find("EnemyContainer"));
+        GameObject.Destroy(GameObject.Find("SpawnManager"));
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(scene + 1);
     }
