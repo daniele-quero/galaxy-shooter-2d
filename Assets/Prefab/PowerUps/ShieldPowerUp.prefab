@@ -128,12 +128,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 9
   duration: 7
-  boost: 1.5
+  magnitude: 2
+  boost: 0
   shields: 2
   scoreValue: 5
-  _sources:
-  - {fileID: 3143827332364402817}
-  - {fileID: -1610945376944783636}
 --- !u!95 &-7298288398518630638
 Animator:
   serializedVersion: 3

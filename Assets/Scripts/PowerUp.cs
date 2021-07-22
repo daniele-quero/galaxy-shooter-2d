@@ -8,6 +8,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
     [SerializeField]
     private float _speed = 6f;
     public float duration = 5f;
+    public float magnitude = 3f;
     public float boost = 1.5f;
     public int shields = 2;
     public int scoreValue = 5;
@@ -86,9 +87,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
                 }
             default:
                 break;
-        }
-
-        
+        }        
     }
 
     private void SelfDestroy()
@@ -97,5 +96,4 @@ public class PowerUp : MonoBehaviour, ISpawnable
         GetComponent<SpriteRenderer>().enabled = false;
         GameObject.Destroy(this.gameObject,0.6f);
     }
-
 }

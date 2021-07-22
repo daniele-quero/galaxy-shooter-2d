@@ -837,7 +837,7 @@ MonoBehaviour:
   - 0.5
   - 7
   powerUpSpawnRate:
-  - 4
+  - 5.1
   - 8
   asteroidSpawnRate:
   - 8
@@ -969,14 +969,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 12
   _defaultSpeed: 12
+  _miniBoost: 18
+  _maxBoostFuel: 5
+  _currentBoostFuel: 5
   _direction: {x: 0, y: 0}
   _laserPrefab: {fileID: 5761331309826155082, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
   _tripleShotPrefab: {fileID: 1339682491742955184, guid: a3ecfd7555a569845898d189ff94c497, type: 3}
   _shieldPrefab: {fileID: 7780092348924507214, guid: ad6f4c52dce3a2f4b914a84508c1c6fc, type: 3}
+  _shot: {fileID: 0}
   _hasTripleShot: 0
-  _shields: 0
+  _hasMegaBoost: 0
   _fireRate: 0.2
   _lives: 3
+  _shields: 0
   Score: 0
   Kills: 0
 --- !u!60 &996177598

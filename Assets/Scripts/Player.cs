@@ -5,33 +5,35 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4f,
-        _defaultSpeed = 4f;
+    private float
+        _speed = 4f,
+        _defaultSpeed = 4f,
+        _miniBoost = 6f,
+        _maxBoostFuel = 5f,
+        _currentBoostFuel = 5f;
 
     [SerializeField]
     private Vector2 _direction = Vector2.zero;
 
     [SerializeField]
-    private GameObject _laserPrefab = null;
+    private GameObject
+        _laserPrefab = null,
+        _tripleShotPrefab = null,
+        _shieldPrefab = null,
+        _shot;
 
     [SerializeField]
-    private GameObject _tripleShotPrefab = null;
-
-    [SerializeField]
-    private GameObject _shieldPrefab = null;
-
-    private GameObject _shot;
-
-    [SerializeField]
-    private bool _hasTripleShot = false;
-
-    [SerializeField]
-    private int _shields = 0;
-
-    private CameraBounds _cameraBounds = null;
-    private Vector3 _playerPosition = Vector3.zero;
+    private bool _hasTripleShot = false,
+        _hasMegaBoost = false;
 
     private SpriteRenderer _spriteRenderer;
+    private CameraBounds _cameraBounds = null;
+    private AudioSource[] _sources;
+    private Dictionary<string, AudioSource> _sounds;
+    private LvlManager _lvlManager;
+    private Thruster _thruster;
+
+    private Vector3 _playerPosition = Vector3.zero;
     private Vector2 _laserSpawnPosition = new Vector2();
 
     [SerializeField]
@@ -39,16 +41,20 @@ public class Player : MonoBehaviour
     private float _nextFireTime = -1f;
 
     [SerializeField]
-    private int _lives = 3;
+    private int _lives = 3,
+        _shields = 0;
 
     public int Score = 0;
     public int Kills = 0;
 
-    private AudioSource[] _sources;
-    private Dictionary<string, AudioSource> _sounds;
-    private LvlManager _lvlManager;
     public int Lives { get => _lives; set => _lives = value; }
     public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
+    public float Speed { get => _speed; set => _speed = value; }
+    public float DefaultSpeed { get => _defaultSpeed; set => _defaultSpeed = value; }
+    public float MiniBoost { get => _miniBoost; set => _miniBoost = value; }
+    public float MaxBoostFuel { get => _maxBoostFuel; set => _maxBoostFuel = value; }
+    public float CurrentBoostFuel { get => _currentBoostFuel; set => _currentBoostFuel = value; }
+    public bool HasMegaBoost { get => _hasMegaBoost; set => _hasMegaBoost = value; }
 
     void Start()
     {
@@ -69,9 +75,9 @@ public class Player : MonoBehaviour
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _sources = GetComponents<AudioSource>();
-
+        _thruster = transform.Find("Thruster").GetComponent<Thruster>();
+        Utilities.CheckNullGrabbed(_thruster, "Thruster Script");
         _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
-        //_lvlManager.LoadLevel1Data();
 
         Score = PlayerPrefs.GetInt("Score", 0);
         _lives = PlayerPrefs.GetInt("Lives", 3);
@@ -87,6 +93,7 @@ public class Player : MonoBehaviour
         CheckBounds();
         Move();
         ShootLaser();
+        _thruster.Boost();
     }
 
     private void Move()
@@ -96,7 +103,7 @@ public class Player : MonoBehaviour
 
         _direction.x = xInput;
         _direction.y = yInput;
-        transform.Translate(_direction * Time.deltaTime * _speed);
+        transform.Translate(_direction * Time.deltaTime * Speed);
     }
 
     private void CheckBounds()
@@ -167,14 +174,18 @@ public class Player : MonoBehaviour
     private void playerDeath()
     {
         GameObject.Destroy(transform.Find("Thruster").gameObject);
+
         Animator animator = GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
         Utilities.CheckNullGrabbed(animator, "Player Animator");
+
         animator.SetTrigger("onPlayerDeath");
         GetComponent<Collider2D>().enabled = false;
         _sounds["explosion"].Play();
         GameObject.Destroy(this.gameObject, clips[0].length);
+
         _lvlManager.PlayerPrefClear();
     }
 
@@ -209,29 +220,37 @@ public class Player : MonoBehaviour
         switch (powerup.tag)
         {
             case "tripleShotPowerUp":
-                _hasTripleShot = true;
-                yield return new WaitForSeconds(powerup.duration);
-                _hasTripleShot = false;
-                break;
+                {
+                    _hasTripleShot = true;
+                    yield return new WaitForSeconds(powerup.duration);
+                    _hasTripleShot = false;
+                    break;
+                }
             case "speedPowerUp":
-                _speed *= powerup.boost;
-                transform.Find("Thruster").localScale = new Vector3(1, 1.8f, 1); ;
-                yield return new WaitForSeconds(powerup.duration);
-                _speed = _defaultSpeed;
-                transform.Find("Thruster").localScale = new Vector3(1, 1, 1);
-                break;
+                {
+                    Speed *= powerup.magnitude;
+                    _hasMegaBoost = true;
+                    _thruster.ThrusterVFX(new Vector3(1.2f, 1.8f, 1), Color.red);
+                    yield return new WaitForSeconds(powerup.duration);
+                    Speed = DefaultSpeed;
+                    _hasMegaBoost = false;
+                    _thruster.RestoreThrusterVFX(true);
+                    break;
+                }
             case "shieldPowerUp":
-                if (_shields > 0)
-                    GameObject.Destroy(transform.Find("Shields").gameObject);
+                {
+                    if (_shields > 0)
+                        GameObject.Destroy(transform.Find("Shields").gameObject);
 
-                _shields = powerup.shields;
-                GameObject shieldObj = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity);
-                shieldObj.transform.SetParent(this.transform);
-                shieldObj.name = "Shields";
-                yield return new WaitForSeconds(powerup.duration);
-                GameObject.Destroy(shieldObj);
-                _shields = 0;
-                break;
+                    _shields = (int) powerup.magnitude;
+                    GameObject shieldObj = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity);
+                    shieldObj.transform.SetParent(this.transform);
+                    shieldObj.name = "Shields";
+                    yield return new WaitForSeconds(powerup.duration);
+                    GameObject.Destroy(shieldObj);
+                    _shields = 0;
+                    break;
+                }
             default:
                 break;
         }
@@ -271,4 +290,5 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
 }
