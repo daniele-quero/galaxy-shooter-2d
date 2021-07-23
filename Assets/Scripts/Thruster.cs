@@ -22,8 +22,11 @@ public class Thruster : MonoBehaviour
         StopCoroutine(FadeThrusterVFX());
         transform.localScale = rescale;
         transform.GetComponent<SpriteRenderer>().color = color;
-        _bar.additionalText = "Mega Boost: ON ";
-        _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
+        if(_player.HasMegaBoost)
+        {
+            _bar.additionalText = "Mega Boost: ON ";
+            _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel); 
+        }
     }
 
     public void RestoreThrusterVFX()
@@ -89,14 +92,17 @@ public class Thruster : MonoBehaviour
             if (_player.CurrentBoostFuel > 0 && Input.GetKeyDown(KeyCode.LeftShift))
             {
                 _player.Speed = _player.MiniBoost;
-                StartCoroutine(ConsumeFuel(0.1f));
+                ThrusterVFX(new Vector3(1f, 1.4f, 1f), Color.white);
+                StopCoroutine(RechargeFuel(0.05f));
+                StartCoroutine(ConsumeFuel(0.2f));
             }
 
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 _player.Speed = _player.DefaultSpeed;
-                StopCoroutine(ConsumeFuel(0.1f));
-                StartCoroutine(RechargeFuel(0.2f));
+                RestoreThrusterVFX();
+                StopCoroutine(ConsumeFuel(0.2f));
+                StartCoroutine(RechargeFuel(0.05f));
             }
         }
     }
@@ -111,22 +117,25 @@ public class Thruster : MonoBehaviour
                 _player.CurrentBoostFuel = 0;
                 _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
                 _player.Speed = _player.DefaultSpeed;
+                RestoreThrusterVFX();
                 break;
             }
             _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
-            yield return new WaitForSeconds(f);
+            yield return new WaitForSeconds(0.1f);
         }
+        RestoreThrusterVFX();
     }
+
     private IEnumerator RechargeFuel(float f)
     {
-        while (_player.CurrentBoostFuel < _player.MaxBoostFuel)
+        while (!Input.GetKey(KeyCode.LeftShift) && _player.CurrentBoostFuel < _player.MaxBoostFuel)
         {
             _player.CurrentBoostFuel += f;
             if (_player.CurrentBoostFuel > _player.MaxBoostFuel)
                 _player.CurrentBoostFuel = _player.MaxBoostFuel;
 
             _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
-            yield return new WaitForSeconds(f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

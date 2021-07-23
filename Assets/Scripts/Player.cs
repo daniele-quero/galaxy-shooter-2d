@@ -174,6 +174,11 @@ public class Player : MonoBehaviour
     private void playerDeath()
     {
         GameObject.Destroy(transform.Find("Thruster").gameObject);
+        GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
+        foreach (var eng in engines)
+            GameObject.Destroy(eng);
+
+        _speed = 0;
 
         Animator animator = GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;

@@ -1028,8 +1028,8 @@ MonoBehaviour:
   _speed: 12
   _defaultSpeed: 12
   _miniBoost: 18
-  _maxBoostFuel: 5
-  _currentBoostFuel: 5
+  _maxBoostFuel: 6
+  _currentBoostFuel: 6
   _direction: {x: 0, y: 0}
   _laserPrefab: {fileID: 5761331309826155082, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
   _tripleShotPrefab: {fileID: 1339682491742955184, guid: a3ecfd7555a569845898d189ff94c497, type: 3}
