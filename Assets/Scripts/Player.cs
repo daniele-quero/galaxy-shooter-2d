@@ -191,7 +191,6 @@ public class Player : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         _sounds["explosion"].Play();
         GameObject.Destroy(this.gameObject, clips[0].length);
-
         _lvlManager.PlayerPrefClear();
     }
 
