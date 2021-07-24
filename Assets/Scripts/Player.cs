@@ -186,6 +186,7 @@ public class Player : MonoBehaviour
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
         Utilities.CheckNullGrabbed(animator, "Player Animator");
 
+        _cameraBounds.CameraShake();
         animator.SetTrigger("onPlayerDeath");
         GetComponent<Collider2D>().enabled = false;
         _sounds["explosion"].Play();

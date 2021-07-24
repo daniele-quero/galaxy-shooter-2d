@@ -13,11 +13,14 @@ public class CameraBounds : MonoBehaviour
     private Vector3 _position = Vector3.zero;
     public Vector2 CameraVisual { get => _cameraVisual; set => _cameraVisual = value; }
 
+    private Animator _cameraShake;
+
     // Start is called before the first frame update
     void Start()
     {
         _camera = GetComponent<Camera>();
         _bg = GetComponentInChildren<SpriteRenderer>();
+        _cameraShake = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,11 @@ public class CameraBounds : MonoBehaviour
         _position = _camera.transform.position;
         _position.z = -_position.z;
         _bg.transform.localPosition = _position;
+    }
+
+    public void CameraShake()
+    {
+        _cameraShake.SetTrigger("onExplosion");
     }
 
 }

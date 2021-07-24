@@ -38,6 +38,12 @@ public class Asteroid : MonoBehaviour, ISpawnable
         _rigidBody = GetComponent<Rigidbody2D>();
         Utilities.CheckNullGrabbed(_animator, "Rigid Body 2D");
 
+        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
+        if (camObj != null)
+            _cameraBounds = camObj.GetComponent<CameraBounds>();
+        else
+            Utilities.LogNullGrabbed("Camera");
+
         DefineAsteroidField();
 
         _rigidBody.angularVelocity = _angSpeed;
@@ -86,6 +92,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
         AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
         _animator.SetTrigger("onAsteroidDestruction");
+        _cameraBounds.CameraShake();
         _rigidBody.velocity *= 0.75f;
         _rigidBody.angularVelocity *= 0.75f;  
         GetComponent<Collider2D>().enabled = false;
@@ -195,7 +202,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
     {
         _spawnLimit = SpawnLimit;
         Vector2 min = new Vector2(_spawnLimit.XMin, _spawnLimit.YMin);
-        Vector2 size = new Vector2(_spawnLimit.XMax - _spawnLimit.XMin + 15f, _spawnLimit.YMax - _spawnLimit.YMin + 15f);
+        Vector2 size = new Vector2(_spawnLimit.XMax - _spawnLimit.XMin + 30f, _spawnLimit.YMax - _spawnLimit.YMin + 30f);
 
         _asteroidField = new Rect(min, size);
     }

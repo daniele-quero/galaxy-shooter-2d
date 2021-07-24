@@ -37,6 +37,12 @@ public class Enemy : MonoBehaviour, ISpawnable
     {
         _animator = GetComponent<Animator>();
         Utilities.CheckNullGrabbed(_animator, "Animator");
+        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
+        if (camObj != null)
+            _cameraBounds = camObj.GetComponent<CameraBounds>();
+        else
+            Utilities.LogNullGrabbed("Camera");
+
         _sources = GetComponents<AudioSource>();
         _sounds = new Dictionary<string, AudioSource>()
         {
@@ -173,6 +179,7 @@ public class Enemy : MonoBehaviour, ISpawnable
         AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
         _animator.SetTrigger("onEnemyDeath");
+        _cameraBounds.CameraShake();
         GetComponent<Collider2D>().enabled = false;
         _speed *= 0.75f;
         _sounds["explosion"].Play();
