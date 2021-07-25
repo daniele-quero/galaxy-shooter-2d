@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2995870560567967985}
   - component: {fileID: -6105333268728494572}
   - component: {fileID: -8428847357995516323}
+  - component: {fileID: 3898844789106571478}
   m_Layer: 0
   m_Name: Shields
   m_TagString: shields
@@ -120,7 +121,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.007157624, y: -0.0136989355}
-  m_Size: {x: 2.6946354, y: 3.3939073}
+  m_Size: {x: 2.894635, y: 3.493907}
   m_Direction: 0
 --- !u!82 &-6105333268728494572
 AudioSource:
@@ -239,3 +240,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3898844789106571478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7780092348924507214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6558ce1c547cb394c97be9ec8e18c668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

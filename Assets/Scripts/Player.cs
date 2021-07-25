@@ -24,7 +24,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private bool _hasTripleShot = false,
-        _hasMegaBoost = false;
+        _hasMegaBoost = false,
+        _hasShields = false;
 
     private SpriteRenderer _spriteRenderer;
     private CameraBounds _cameraBounds = null;
@@ -41,8 +42,8 @@ public class Player : MonoBehaviour
     private float _nextFireTime = -1f;
 
     [SerializeField]
-    private int _lives = 3,
-        _shields = 0;
+    private int _lives = 3;
+        //_shields = 0;
 
     public int Score = 0;
     public int Kills = 0;
@@ -64,7 +65,7 @@ public class Player : MonoBehaviour
             ["laser"] = _sources[0],
             ["explosion"] = _sources[1],
             ["damage"] = _sources[2],
-            ["shieldDamage"] = _sources[3]
+            //["shieldDamage"] = _sources[3]
         };
 
         GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
@@ -142,14 +143,16 @@ public class Player : MonoBehaviour
 
     public void Damage(int dmg, float x)
     {
-        if (_shields > 0)
-        {
-            _shields -= dmg;
-            _sounds["shieldDamage"].Play();
-            if (_shields <= 0)
-                DestroyShield();
-        }
-        else
+        //if (_shields > 0)
+        //{
+        //    _shields -= dmg;
+        //    _sounds["shieldDamage"].Play();
+        //    if (_shields <= 0)
+        //        DestroyShield();
+        //}
+        //else
+        //{
+        if(!_hasShields)
         {
             _lives -= dmg;
             _sounds["damage"].Play();
@@ -157,8 +160,9 @@ public class Player : MonoBehaviour
             if (_lives < 2)
                 SetEngineFire(x);
 
-            PlayerPrefs.SetInt("Lives", _lives);
+            PlayerPrefs.SetInt("Lives", _lives); 
         }
+        //}
 
         if (_lives < 0)
             playerDeath();
@@ -194,12 +198,12 @@ public class Player : MonoBehaviour
         _lvlManager.PlayerPrefClear();
     }
 
-    private void DestroyShield()
-    {
-        Transform shieldTr;
-        if ((shieldTr = transform.Find("Shields")) != null)
-            GameObject.Destroy(shieldTr.gameObject);
-    }
+    //private void DestroyShield()
+    //{
+    //    Transform shieldTr;
+    //    if ((shieldTr = transform.Find("Shields")) != null)
+    //        GameObject.Destroy(shieldTr.gameObject);
+    //}
 
     private void SetEngineFire(float x)
     {
@@ -233,6 +237,13 @@ public class Player : MonoBehaviour
                 }
             case "speedPowerUp":
                 {
+                    if (_hasMegaBoost)
+                    {
+                        AddScore(powerup.scoreValue);
+                        yield return null;
+                        break;
+                    }
+
                     Speed *= powerup.magnitude;
                     _hasMegaBoost = true;
                     _thruster.ThrusterVFX(new Vector3(1.2f, 1.8f, 1), Color.red);
@@ -244,16 +255,34 @@ public class Player : MonoBehaviour
                 }
             case "shieldPowerUp":
                 {
-                    if (_shields > 0)
-                        GameObject.Destroy(transform.Find("Shields").gameObject);
+                    if (_hasShields)
+                    {
+                        AddScore(powerup.scoreValue);
+                        yield return null;
+                        break;
+                    }          
+                    
+                    Shields shields = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity)
+                        .GetComponent<Shields>();
+                    shields.SetOwner(transform, "Shields");
+                    _hasShields = true;
+                    shields.ShieldLives = (int) powerup.magnitude;
+                    UIManager uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
+                    uimanager.ActivateShieldBarActivation();
 
-                    _shields = (int) powerup.magnitude;
-                    GameObject shieldObj = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity);
-                    shieldObj.transform.SetParent(this.transform);
-                    shieldObj.name = "Shields";
-                    yield return new WaitForSeconds(powerup.duration);
-                    GameObject.Destroy(shieldObj);
-                    _shields = 0;
+                    float time = powerup.duration;
+                    while (time > 0)
+                    {
+                        time -= 0.1f;
+                        if (time < 0)
+                            time = 0f;
+                        uimanager.GetShieldBarText().text = "Shield Time: " + time.ToString("N1");
+                        yield return new WaitForSeconds(0.1f);
+                    }
+
+                    uimanager.DeactivateShieldBarActivation();
+                    _hasShields = false;
+                    shields.Destroy();
                     break;
                 }
             default:

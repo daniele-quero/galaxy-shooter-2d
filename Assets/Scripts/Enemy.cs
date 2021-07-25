@@ -47,7 +47,8 @@ public class Enemy : MonoBehaviour, ISpawnable
         _sounds = new Dictionary<string, AudioSource>()
         {
             ["collision"] = _sources[0],
-            ["explosion"] = _sources[1]
+            ["explosion"] = _sources[1],
+            ["laser"] = _sources[2],
         };
 
         _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
@@ -82,24 +83,34 @@ public class Enemy : MonoBehaviour, ISpawnable
         while (_isShooting)
         {
             yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
-          
-            if (Engage("Player"))
+
+            if (Engage(new string[]{"Player", "shields"}))
             {
                 Vector2 laserSpawn = transform.position;
                 laserSpawn.y -= _spawnLimit.YOff;
                 GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
                 foreach(var las in enemyLaser.GetComponentsInChildren<Laser>())
                     las.SetEnemyLaser();
+
+                _sounds["laser"].Play();
             }
         }
     }
 
-    private bool Engage(string otherTag)
+    private bool Engage(string[] otherTags)
     {
         Vector2 origin = transform.position;
         origin.y -= _spawnLimit.YOff;
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down);
-        return hit.collider != null && hit.collider.tag == otherTag;
+
+        if (hit.collider != null)
+        {
+            foreach (var ot in otherTags)
+                if (hit.collider.tag == ot)
+                    return true; 
+        }
+
+        return  false;
     }
 
     public void RespawnAtTop()

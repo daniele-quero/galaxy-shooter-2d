@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
 
     private bool _isGameOver = false;
 
+    GameObject _shieldBar;
+
     [SerializeField]
     private Sprite[] _livesSprite = new Sprite[4];
     public int scorePadding = 0;
@@ -47,6 +49,9 @@ public class UIManager : MonoBehaviour
         Utilities.CheckNullGrabbed(_pauseAnimator, "Pause Animator");
 
         StartCoroutine(FadeLevelText());
+
+        _shieldBar = transform.Find("Shields Bar").gameObject;
+        Utilities.CheckNullGrabbed(_shieldBar, "Shields Bar");
     }
 
     private void Update()
@@ -133,5 +138,25 @@ public class UIManager : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void ActivateShieldBarActivation()
+    {  
+        _shieldBar.SetActive(true);
+    }
+
+    public void DeactivateShieldBarActivation()
+    {
+        _shieldBar.SetActive(false);
+    }
+
+    public Text GetShieldBarText()
+    {
+        return _shieldBar.transform.Find("Shields Text").GetComponent<Text>();
+    }
+
+    public SimpleHealthBar GetShieldBar()
+    {
+        return _shieldBar.GetComponentInChildren<SimpleHealthBar>();
     }
 }
