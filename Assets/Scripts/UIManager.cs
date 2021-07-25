@@ -159,4 +159,9 @@ public class UIManager : MonoBehaviour
     {
         return _shieldBar.GetComponentInChildren<SimpleHealthBar>();
     }
+
+    public void UpdateAmmoText(int ammo, int max)
+    {
+        transform.Find("Ammo").GetComponent<Text>().text = "Ammo: " + ammo.ToString().PadLeft(2, '0') + "/" + max;
+    }
 }

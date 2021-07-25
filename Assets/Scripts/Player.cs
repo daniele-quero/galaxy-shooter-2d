@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
     private AudioSource[] _sources;
     private Dictionary<string, AudioSource> _sounds;
     private LvlManager _lvlManager;
+    private UIManager _uiman;
     private Thruster _thruster;
 
     private Vector3 _playerPosition = Vector3.zero;
@@ -84,6 +85,9 @@ public class Player : MonoBehaviour
         _thruster = transform.Find("Thruster").GetComponent<Thruster>();
         Utilities.CheckNullGrabbed(_thruster, "Thruster Script");
         _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+        _uiman = GameObject.Find("Canvas").GetComponent<UIManager>();
+        Utilities.CheckNullGrabbed(_uiman, "UIManager");
+        _uiman.UpdateAmmoText(_ammo, _maxAmmo);
 
         Score = PlayerPrefs.GetInt("Score", 0);
         _lives = PlayerPrefs.GetInt("Lives", 3);
@@ -144,7 +148,8 @@ public class Player : MonoBehaviour
                     _ammo--;
                     _nextFireTime = Time.time + _fireRate;
                     Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
-                    _sounds["laser"].Play(); 
+                    _sounds["laser"].Play();
+                    _uiman.UpdateAmmoText(_ammo, _maxAmmo);
                 }
                 else
                     _sounds["noammo"].Play();
