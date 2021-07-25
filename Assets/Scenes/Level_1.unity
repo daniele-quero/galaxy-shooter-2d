@@ -1050,6 +1050,8 @@ MonoBehaviour:
   _miniBoost: 18
   _maxBoostFuel: 6
   _currentBoostFuel: 6
+  _ammo: 15
+  _maxAmmo: 15
   _direction: {x: 0, y: 0}
   _laserPrefab: {fileID: 5761331309826155082, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
   _tripleShotPrefab: {fileID: 1339682491742955184, guid: a3ecfd7555a569845898d189ff94c497, type: 3}
@@ -1237,7 +1239,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ab297b593498a6e47ba84de770477cbe, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e0f304ae532060b4084ac190c2af8b15, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

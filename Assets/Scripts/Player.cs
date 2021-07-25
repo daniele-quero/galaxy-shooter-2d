@@ -13,6 +13,11 @@ public class Player : MonoBehaviour
         _currentBoostFuel = 5f;
 
     [SerializeField]
+    private int _ammo = 15,
+        _maxAmmo = 15;
+
+
+    [SerializeField]
     private Vector2 _direction = Vector2.zero;
 
     [SerializeField]
@@ -65,7 +70,7 @@ public class Player : MonoBehaviour
             ["laser"] = _sources[0],
             ["explosion"] = _sources[1],
             ["damage"] = _sources[2],
-            //["shieldDamage"] = _sources[3]
+            ["noammo"] = _sources[3]
         };
 
         GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
@@ -134,25 +139,22 @@ public class Player : MonoBehaviour
 
             if (_shot != null && Time.time > _nextFireTime)
             {
-                _nextFireTime = Time.time + _fireRate;
-                Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
-                _sounds["laser"].Play();
+                if (_ammo > 0)
+                {
+                    _ammo--;
+                    _nextFireTime = Time.time + _fireRate;
+                    Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
+                    _sounds["laser"].Play(); 
+                }
+                else
+                    _sounds["noammo"].Play();
             }
         }
     }
 
     public void Damage(int dmg, float x)
     {
-        //if (_shields > 0)
-        //{
-        //    _shields -= dmg;
-        //    _sounds["shieldDamage"].Play();
-        //    if (_shields <= 0)
-        //        DestroyShield();
-        //}
-        //else
-        //{
-        if(!_hasShields)
+        if (!_hasShields)
         {
             _lives -= dmg;
             _sounds["damage"].Play();
@@ -160,9 +162,8 @@ public class Player : MonoBehaviour
             if (_lives < 2)
                 SetEngineFire(x);
 
-            PlayerPrefs.SetInt("Lives", _lives); 
+            PlayerPrefs.SetInt("Lives", _lives);
         }
-        //}
 
         if (_lives < 0)
             playerDeath();
@@ -197,13 +198,6 @@ public class Player : MonoBehaviour
         GameObject.Destroy(this.gameObject, clips[0].length);
         _lvlManager.PlayerPrefClear();
     }
-
-    //private void DestroyShield()
-    //{
-    //    Transform shieldTr;
-    //    if ((shieldTr = transform.Find("Shields")) != null)
-    //        GameObject.Destroy(shieldTr.gameObject);
-    //}
 
     private void SetEngineFire(float x)
     {
