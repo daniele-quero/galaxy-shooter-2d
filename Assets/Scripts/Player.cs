@@ -91,6 +91,7 @@ public class Player : MonoBehaviour
 
         Score = PlayerPrefs.GetInt("Score", 0);
         _lives = PlayerPrefs.GetInt("Lives", 3);
+        PlayerPrefs.GetInt("ammo", 15);
 
         if (PlayerPrefs.GetInt("Engine0", 0) == 1)
             SetEngineFire(transform.position.x - 1);
@@ -146,6 +147,7 @@ public class Player : MonoBehaviour
                 if (_ammo > 0)
                 {
                     _ammo--;
+                    PlayerPrefs.SetInt("ammo", _ammo);
                     _nextFireTime = Time.time + _fireRate;
                     Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
                     _sounds["laser"].Play();
@@ -284,6 +286,12 @@ public class Player : MonoBehaviour
                     shields.Destroy();
                     break;
                 }
+            case "ammo":
+                _ammo += (int)powerup.magnitude;
+                _ammo = Mathf.Clamp(_ammo, 0, _maxAmmo);
+                _uiman.UpdateAmmoText(_ammo, _maxAmmo);
+                PlayerPrefs.SetInt("ammo", _ammo);
+                break; 
             default:
                 break;
         }
@@ -297,7 +305,7 @@ public class Player : MonoBehaviour
     public void AddScore(int score)
     {
         Score += score;
-        PlayerPrefs.SetInt("Score", Kills);
+        PlayerPrefs.SetInt("Score", Score);
         UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (ui != null)
             ui.UpdateScoreText(Score);
