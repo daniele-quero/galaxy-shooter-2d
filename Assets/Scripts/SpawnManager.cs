@@ -8,7 +8,8 @@ public class SpawnManager : MonoBehaviour
     private float _enemyRate = 5f,
         _powerUpRateMin = 4f, _powerUpRateMax = 8f,
         _asteroidRateMin = 8f, _asteroidRateMax = 10f,
-        _ammoRate = 5f;
+        _ammoRate = 5f,
+        _1upRateMin = 15f, _1upRateMax = 20f;
 
     [SerializeField]
     private GameObject _enemyContainer, _powerUpContainer, _asteroidContainer;
@@ -20,12 +21,13 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> _powerUpPrefabs;
 
     [SerializeField]
-    private GameObject _ammoPrefab;
+    private GameObject _ammoPrefab, _1upPrefab;
 
     private Vector3 _enemyPosition = Vector3.zero;
     private Vector3 _powerUpPosition = Vector3.zero;
     private Vector3 _asteroidPosition = Vector3.zero;
     private Vector3 _ammoPosition = Vector3.zero;
+    private Vector3 _1upPosition = Vector3.zero;
     private Player _player = null;
     private Enemy _enemy = null;
 
@@ -49,12 +51,15 @@ public class SpawnManager : MonoBehaviour
             _ammoRate = lvlManager.ammoSpawnRate;
             _powerUpRateMin = lvlManager.powerUpSpawnRate[0];
             _powerUpRateMax = lvlManager.powerUpSpawnRate[1];
+            _1upRateMin = lvlManager.oneUpSpawnRate[0];
+            _1upRateMax = lvlManager.oneUpSpawnRate[1];
             _asteroidRateMin = lvlManager.asteroidSpawnRate[0];
             _asteroidRateMax = lvlManager.asteroidSpawnRate[1];
         }
 
         StartCoroutine(SpawnEnemy(_enemyRate));
         StartCoroutine(SpawnAmmo(_ammoRate));
+        StartCoroutine(Spawn1up(_1upRateMin, _1upRateMax));
         StartCoroutine(SpawnAsteroids(_asteroidRateMin, _asteroidRateMax, _asteroidPrefab));
 
         foreach (GameObject powerUp in _powerUpPrefabs)
@@ -174,6 +179,31 @@ public class SpawnManager : MonoBehaviour
                 {
                     _ammoPosition.x = Random.Range(ammoUp.SpawnLimit.XMin, ammoUp.SpawnLimit.XMax);
                     Instantiate(_ammoPrefab, _ammoPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
+                }
+            }
+            else
+                yield return null;
+        }
+    }
+
+    IEnumerator Spawn1up(float rateMin, float rateMax)
+    {
+        while (true)
+        {
+            if (ShouldSpawn(isSpawningPowerUpsOverride))
+            {
+                float rate = Random.Range(rateMin, rateMax);
+                PowerUp oneUp = _1upPrefab.GetComponent<PowerUp>();
+                _1upPosition.y = oneUp.SpawnLimit.YMax;
+
+                yield return new WaitForSeconds(rate);
+                if (_1upPosition.y > 50f)
+                    yield return null;
+
+                else
+                {
+                    _1upPosition.x = Random.Range(oneUp.SpawnLimit.XMin, oneUp.SpawnLimit.XMax);
+                    Instantiate(_1upPrefab, _1upPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
                 }
             }
             else

@@ -19,6 +19,7 @@ TagManager:
   - enemyLaser
   - thrusterBar
   - ammo
+  - 1up
   layers:
   - Default
   - TransparentFX

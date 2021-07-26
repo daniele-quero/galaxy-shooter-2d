@@ -862,6 +862,9 @@ MonoBehaviour:
   asteroidSpawnRate:
   - 8
   - 10
+  oneUpSpawnRate:
+  - 15
+  - 25
   enemySpawnRate: 4
   ammoSpawnRate: 4
   enemyScore: 15
@@ -3111,6 +3114,8 @@ MonoBehaviour:
   _asteroidRateMin: 4
   _asteroidRateMax: 10
   _ammoRate: 5
+  _1upRateMin: 15
+  _1upRateMax: 20
   _enemyContainer: {fileID: 1965446387}
   _powerUpContainer: {fileID: 837734869}
   _asteroidContainer: {fileID: 1814434543}
@@ -3121,6 +3126,7 @@ MonoBehaviour:
   - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}
   - {fileID: 8951456139931299886, guid: 12ad55362efdbae4ebcba0be0946bc41, type: 3}
   _ammoPrefab: {fileID: 8043667017539851925, guid: d6f328947df59bd48856902ea8bd9ca5, type: 3}
+  _1upPrefab: {fileID: 4926720356299223991, guid: 04b04a3c61d9c434cac2e2150d277b97, type: 3}
   isSpawningEnemiesOverride: 1
   isSpawningPowerUpsOverride: 1
   isSpawningAsteroidsOverride: 1

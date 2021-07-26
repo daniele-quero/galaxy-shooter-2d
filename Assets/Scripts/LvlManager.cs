@@ -11,6 +11,7 @@ public class LvlManager : MonoBehaviour
     public float[] enemyLaserRate = new float[2];
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];
+    public float[] oneUpSpawnRate = new float[2];
     public float enemySpawnRate;
     public float ammoSpawnRate;
     public int enemyScore;

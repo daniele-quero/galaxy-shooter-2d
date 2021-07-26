@@ -183,6 +183,20 @@ public class Player : MonoBehaviour
 
     }
 
+    public void Repair(int up, int scoreValue)
+    {
+        _lives += up;
+        if (_lives > 3)
+        {
+            _lives = 3;
+            AddScore(scoreValue);
+        }
+
+        UnsetEngineFire();
+        _uiman.UpdateLivesDisplay(_lives);
+
+    }
+
     private void playerDeath()
     {
         GameObject.Destroy(transform.Find("Thruster").gameObject);
@@ -222,6 +236,19 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
             PlayerPrefs.SetInt("Engine" + i, engines[i].activeInHierarchy ? 1 : 0);
+    }
+
+    private void UnsetEngineFire()
+    {
+        GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
+        foreach(var eng in engines)
+        {
+            if (eng.activeInHierarchy)
+            {
+                eng.SetActive(false);
+                return;
+            }
+        }
     }
 
 
@@ -288,10 +315,17 @@ public class Player : MonoBehaviour
                 }
             case "ammo":
                 _ammo += (int)powerup.magnitude;
-                _ammo = Mathf.Clamp(_ammo, 0, _maxAmmo);
+                if(_ammo > 30)
+                {
+                    _ammo = 30;
+                    AddScore(powerup.scoreValue);
+                }
                 _uiman.UpdateAmmoText(_ammo, _maxAmmo);
                 PlayerPrefs.SetInt("ammo", _ammo);
-                break; 
+                break;
+            case "1up":
+                Repair((int)powerup.magnitude, powerup.scoreValue);
+                break;
             default:
                 break;
         }
