@@ -125,6 +125,34 @@ public class Enemy : MonoBehaviour, ISpawnable
         }
     }
 
+    private void EnemyDamageBase()
+    {
+        _lives--;
+        _sounds["collision"].Play();
+        if (_lives < 0)
+            EnemyDeath();
+    }
+
+    public void EnemyKill(bool isRam)
+    {
+        EnemyDamageBase();
+        if (_lives < 0)
+        {
+            Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            if (player != null)
+            {
+                player.AddScore(_scoreValue);
+                player.addKill(1);
+                if(isRam)
+                    player.Damage(1, transform.position.x);
+            }
+        }
+    }
+
+    public void EnemyKill()
+    {
+        EnemyKill(false);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (collision.tag)
@@ -132,39 +160,12 @@ public class Enemy : MonoBehaviour, ISpawnable
             case "laser":
                 {
                     GameObject.Destroy(collision.gameObject);
-                    _lives--;
-                    _sounds["collision"].Play();
-                    if(_lives < 0)
-                    {
-                        EnemyDeath();
-                        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-                        if (player != null)
-                        {
-                            player.AddScore(_scoreValue);
-                            player.addKill(1);
-                        }
-                    }
-
+                    EnemyKill();
                     break;
                 }
             case "Player":
                 {
-                    Player player = collision.GetComponent<Player>();
-                    _lives--;
-                    _sounds["collision"].Play();
-                    if (_lives < 0)
-                    {
-                        EnemyDeath();
-                        if (player != null)
-                        {
-                            player.AddScore(_scoreValue);
-                            player.addKill(1);
-                        }
-                    }              
-                    
-                    if (player != null)
-                        player.Damage(1, transform.position.x);
-
+                    EnemyKill(true);
                     break;
                 }
             case "shields":

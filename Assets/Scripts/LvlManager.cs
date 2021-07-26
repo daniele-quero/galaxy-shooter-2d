@@ -12,6 +12,7 @@ public class LvlManager : MonoBehaviour
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];
     public float[] oneUpSpawnRate = new float[2];
+    public float[] DeathRaySpawnRate = new float[2];
     public float enemySpawnRate;
     public float ammoSpawnRate;
     public int enemyScore;
@@ -19,13 +20,11 @@ public class LvlManager : MonoBehaviour
     public bool isEnemyShooting = false;
     public bool autoGeneration = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         GameObject.Find("Main Camera").GetComponent<AudioSource>().time = PlayerPrefs.GetFloat("BkgMusic", 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
 

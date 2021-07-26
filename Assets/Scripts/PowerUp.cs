@@ -73,19 +73,27 @@ public class PowerUp : MonoBehaviour, ISpawnable
             case "laser":
                 {
                     GameObject.Destroy(collision.gameObject);
-                    Player player = GameObject.FindGameObjectWithTag("Player") != null
-                        ? GameObject.FindGameObjectWithTag("Player").GetComponent<Player>()
-                        : null;
-                    if (player != null)
-                        player.AddScore(scoreValue);
-
-                    _sounds["destroy"].Play();
-                    SelfDestroy();
+                    DestroyPowerUp();
                     break;
                 }
+            case "deathRay":
+                DestroyPowerUp();
+                break;
             default:
                 break;
         }        
+    }
+
+    private void DestroyPowerUp()
+    {
+        Player player = GameObject.FindGameObjectWithTag("Player") != null
+                        ? GameObject.FindGameObjectWithTag("Player").GetComponent<Player>()
+                        : null;
+        if (player != null)
+            player.AddScore(scoreValue);
+
+        _sounds["destroy"].Play();
+        SelfDestroy();
     }
 
     private void SelfDestroy()

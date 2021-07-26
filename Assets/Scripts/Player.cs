@@ -25,12 +25,14 @@ public class Player : MonoBehaviour
         _laserPrefab = null,
         _tripleShotPrefab = null,
         _shieldPrefab = null,
+        _deathRayPrefab = null,
         _shot;
 
     [SerializeField]
     private bool _hasTripleShot = false,
         _hasMegaBoost = false,
-        _hasShields = false;
+        _hasShields = false,
+        _hasDeathRay = false;
 
     private SpriteRenderer _spriteRenderer;
     private CameraBounds _cameraBounds = null;
@@ -140,6 +142,9 @@ public class Player : MonoBehaviour
             _shot = _laserPrefab;
             if (_hasTripleShot)
                 _shot = _tripleShotPrefab;
+
+            else if (_hasDeathRay)
+                _shot = _deathRayPrefab;
 
             if (_shot != null && Time.time > _nextFireTime)
             {
@@ -255,6 +260,13 @@ public class Player : MonoBehaviour
                     _hasTripleShot = true;
                     yield return new WaitForSeconds(powerup.duration);
                     _hasTripleShot = false;
+                    break;
+                }
+            case "deathRayPowerUp":
+                {
+                    _hasDeathRay = true;
+                    yield return new WaitForSeconds(powerup.duration);
+                    _hasDeathRay = false;
                     break;
                 }
             case "speedPowerUp":

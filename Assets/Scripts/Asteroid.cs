@@ -106,27 +106,13 @@ public class Asteroid : MonoBehaviour, ISpawnable
         {
             case "laser":
                 {
-                    _lives--;
-                    _sounds["laserDamage"].Play();
-                    if (_lives < 0)
-                    {
-                        AsteroidDestruction();
-                        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-                        if (player != null)
-                            player.AddScore(_score);
-                    }
-
+                    AsteroidDamage();
                     GameObject.Destroy(collision.gameObject);
-                    _rigidBody.AddForce(Vector2.up * 0.1f);
                     break;
                 }
             case "enemy":
                 {
-                    _lives--;
-                    _sounds["collision"].Play();
-                    if (_lives < 0)
-                        AsteroidDestruction();
-
+                    AsteroidDamageBase();
                     Enemy enemy = collision.GetComponent<Enemy>();
                     if (enemy != null)
                         enemy.EnemyDeath();
@@ -135,19 +121,40 @@ public class Asteroid : MonoBehaviour, ISpawnable
                 }
             case "Player":
                 {
-                    _lives--;
-                    _sounds["collision"].Play();
-                    if (_lives < 0)
-                        AsteroidDestruction();
+                    AsteroidDamageBase();
                     Player player = collision.GetComponent<Player>();
                     if (player != null)
                         player.Damage(1, transform.position.x);
                     break;
                 }
-            
             default:
                 break;
         }
+    }
+
+    private void AsteroidDamageBase()
+    {
+        _lives--;
+        _sounds["collision"].Play();
+        if (_lives < 0)
+            AsteroidDestruction();
+    }
+
+    public void AsteroidDamage()
+    {
+        AsteroidDamage(true);
+    }
+
+    public void AsteroidDamage(bool isScore)
+    {
+        AsteroidDamageBase();
+        if (_lives < 0)
+        {
+            Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            if (player != null && isScore)
+                player.AddScore(_score);
+        }
+        _rigidBody.AddForce(Vector2.up * 0.5f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -158,10 +165,7 @@ public class Asteroid : MonoBehaviour, ISpawnable
                 _sounds["collision"].Play();
                 break;
             case "shields":
-                _lives--;
-                _sounds["collision"].Play();
-                if (_lives < 0)
-                    AsteroidDestruction();
+                AsteroidDamageBase();
 
                 Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
                 if (player != null)

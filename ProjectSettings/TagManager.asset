@@ -19,10 +19,9 @@ TagManager:
   - enemyLaser
   - thrusterBar
   - ammo
-<<<<<<< HEAD
   - 1up
-=======
->>>>>>> 260d9729bf2d496a3fbae55b2ba60bba35d3d596
+  - deathRay
+  - deathRayPowerUp
   layers:
   - Default
   - TransparentFX

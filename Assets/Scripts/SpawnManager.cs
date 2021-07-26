@@ -9,7 +9,8 @@ public class SpawnManager : MonoBehaviour
         _powerUpRateMin = 4f, _powerUpRateMax = 8f,
         _asteroidRateMin = 8f, _asteroidRateMax = 10f,
         _ammoRate = 5f,
-        _1upRateMin = 15f, _1upRateMax = 20f;
+        _1upRateMin = 15f, _1upRateMax = 20f,
+        _deathRayRateMin = 20f, _deathRayRateMax = 25f;
 
     [SerializeField]
     private GameObject _enemyContainer, _powerUpContainer, _asteroidContainer;
@@ -21,13 +22,9 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> _powerUpPrefabs;
 
     [SerializeField]
-    private GameObject _ammoPrefab, _1upPrefab;
+    private GameObject _ammoPrefab, _1upPrefab, _deathRayPowerUpPrefab;
 
-    private Vector3 _enemyPosition = Vector3.zero;
-    private Vector3 _powerUpPosition = Vector3.zero;
-    private Vector3 _asteroidPosition = Vector3.zero;
-    private Vector3 _ammoPosition = Vector3.zero;
-    private Vector3 _1upPosition = Vector3.zero;
+    private Vector3 _position = Vector3.zero;
     private Player _player = null;
     private Enemy _enemy = null;
 
@@ -55,37 +52,36 @@ public class SpawnManager : MonoBehaviour
             _1upRateMax = lvlManager.oneUpSpawnRate[1];
             _asteroidRateMin = lvlManager.asteroidSpawnRate[0];
             _asteroidRateMax = lvlManager.asteroidSpawnRate[1];
+            _deathRayRateMin = lvlManager.DeathRaySpawnRate[0];
+            _deathRayRateMax = lvlManager.DeathRaySpawnRate[1];
         }
 
-        StartCoroutine(SpawnEnemy(_enemyRate));
-        StartCoroutine(SpawnAmmo(_ammoRate));
-        StartCoroutine(Spawn1up(_1upRateMin, _1upRateMax));
+        StartCoroutine(SpawnEnemy(_enemyRate, _enemyPrefab));
         StartCoroutine(SpawnAsteroids(_asteroidRateMin, _asteroidRateMax, _asteroidPrefab));
+
+        StartCoroutine(SpawnSingleRatePowerUp(_ammoRate, _ammoPrefab));      
+        StartCoroutine(SpawnPowerUps(_1upRateMin, _1upRateMax, _1upPrefab));
+        StartCoroutine(SpawnPowerUps(_deathRayRateMin, _deathRayRateMax, _deathRayPowerUpPrefab));
 
         foreach (GameObject powerUp in _powerUpPrefabs)
             StartCoroutine(SpawnPowerUps(_powerUpRateMin, _powerUpRateMax, powerUp));
 
     }
 
-    void Update()
-    {
-
-    }
-
-    IEnumerator SpawnEnemy(float rate)
+    IEnumerator SpawnEnemy(float rate, GameObject enemyPrefab)
     {
         while (isSpawningEnemiesOverride)
         {
             if (ShouldSpawn(isSpawningEnemiesOverride))
             {
-                _enemyPosition.y = _enemy.SpawnLimit.YMax;
-                if (_enemyPosition.y > 50f)
+                _position.y = _enemy.SpawnLimit.YMax;
+                if (_position.y > 50f)
                     yield return null;
 
                 else
                 {
-                    _enemyPosition.x = Random.Range(_enemy.SpawnLimit.XMin, _enemy.SpawnLimit.XMax);
-                    Instantiate(_enemyPrefab, _enemyPosition, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
+                    _position.x = Random.Range(_enemy.SpawnLimit.XMin, _enemy.SpawnLimit.XMax);
+                    Instantiate(enemyPrefab, _position, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
                     yield return new WaitForSeconds(rate);
                 }
             }
@@ -104,16 +100,16 @@ public class SpawnManager : MonoBehaviour
                 float rate = Random.Range(minRate, maxRate);
                 PowerUp selected = powerUp.GetComponent<PowerUp>();
 
-                _powerUpPosition.y = selected.SpawnLimit.YMax;
+                _position.y = selected.SpawnLimit.YMax;
 
                 yield return new WaitForSeconds(rate);
-                if (_powerUpPosition.y > 50f)
+                if (_position.y > 50f)
                     yield return null;
 
                 else
                 {
-                    _powerUpPosition.x = Random.Range(selected.SpawnLimit.XMin, selected.SpawnLimit.XMax);
-                    Instantiate(powerUp, _powerUpPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
+                    _position.x = Random.Range(selected.SpawnLimit.XMin, selected.SpawnLimit.XMax);
+                    Instantiate(powerUp, _position, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
                 }
             }
 
@@ -134,26 +130,26 @@ public class SpawnManager : MonoBehaviour
                 switch (state)
                 {
                     case 0:
-                        _asteroidPosition.y = script.SpawnLimit.YMax;
-                        _asteroidPosition.x = script.SpawnLimit.XMax;
+                        _position.y = script.SpawnLimit.YMax;
+                        _position.x = script.SpawnLimit.XMax;
                         break;
                     case 1:
-                        _asteroidPosition.y = script.SpawnLimit.YMax;
-                        _asteroidPosition.x = script.SpawnLimit.XMin;
+                        _position.y = script.SpawnLimit.YMax;
+                        _position.x = script.SpawnLimit.XMin;
                         break;
                     case 2:
-                        _asteroidPosition.y = script.SpawnLimit.YMin;
-                        _asteroidPosition.x = script.SpawnLimit.XMax;
+                        _position.y = script.SpawnLimit.YMin;
+                        _position.x = script.SpawnLimit.XMax;
                         break;
                     case 3:
-                        _asteroidPosition.y = script.SpawnLimit.YMin;
-                        _asteroidPosition.x = script.SpawnLimit.XMin;
+                        _position.y = script.SpawnLimit.YMin;
+                        _position.x = script.SpawnLimit.XMin;
                         break;
                 }
 
                 yield return new WaitForSeconds(rate);
                 
-                Instantiate(asteroid, _asteroidPosition, Quaternion.identity).transform.SetParent(_asteroidContainer.transform);
+                Instantiate(asteroid, _position, Quaternion.identity).transform.SetParent(_asteroidContainer.transform);
 
             }
 
@@ -162,48 +158,23 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnAmmo(float rate)
+    IEnumerator SpawnSingleRatePowerUp(float rate, GameObject srpu)
     {
-        while (true)
+        while (isSpawningPowerUpsOverride)
         {
             if (ShouldSpawn(isSpawningPowerUpsOverride))
             {
-                PowerUp ammoUp = _ammoPrefab.GetComponent<PowerUp>();
-                _ammoPosition.y = ammoUp.SpawnLimit.YMax;
+                PowerUp pu = srpu.GetComponent<PowerUp>();
+                _position.y = pu.SpawnLimit.YMax;
 
                 yield return new WaitForSeconds(rate);
-                if (_ammoPosition.y > 50f)
+                if (_position.y > 50f)
                     yield return null;
 
                 else
                 {
-                    _ammoPosition.x = Random.Range(ammoUp.SpawnLimit.XMin, ammoUp.SpawnLimit.XMax);
-                    Instantiate(_ammoPrefab, _ammoPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
-                }
-            }
-            else
-                yield return null;
-        }
-    }
-
-    IEnumerator Spawn1up(float rateMin, float rateMax)
-    {
-        while (true)
-        {
-            if (ShouldSpawn(isSpawningPowerUpsOverride))
-            {
-                float rate = Random.Range(rateMin, rateMax);
-                PowerUp oneUp = _1upPrefab.GetComponent<PowerUp>();
-                _1upPosition.y = oneUp.SpawnLimit.YMax;
-
-                yield return new WaitForSeconds(rate);
-                if (_1upPosition.y > 50f)
-                    yield return null;
-
-                else
-                {
-                    _1upPosition.x = Random.Range(oneUp.SpawnLimit.XMin, oneUp.SpawnLimit.XMax);
-                    Instantiate(_1upPrefab, _1upPosition, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
+                    _position.x = Random.Range(pu.SpawnLimit.XMin, pu.SpawnLimit.XMax);
+                    Instantiate(srpu, _position, Quaternion.identity).transform.SetParent(_powerUpContainer.transform);
                 }
             }
             else
