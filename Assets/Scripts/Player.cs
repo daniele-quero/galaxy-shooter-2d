@@ -49,7 +49,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _lives = 3;
-        //_shields = 0;
 
     public int Score = 0;
     public int Kills = 0;
@@ -175,12 +174,7 @@ public class Player : MonoBehaviour
         if (_lives < 0)
             playerDeath();
 
-        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if (ui != null)
-            ui.UpdateLivesDisplay(_lives);
-        else
-            Utilities.LogNullGrabbed("UIManager");
-
+        _uiman.UpdateLivesDisplay(_lives);
     }
 
     public void Repair(int up, int scoreValue)
@@ -241,7 +235,7 @@ public class Player : MonoBehaviour
     private void UnsetEngineFire()
     {
         GameObject[] engines = new GameObject[2] { transform.Find("EngineFire0").gameObject, transform.Find("EngineFire1").gameObject };
-        foreach(var eng in engines)
+        foreach (var eng in engines)
         {
             if (eng.activeInHierarchy)
             {
@@ -288,15 +282,14 @@ public class Player : MonoBehaviour
                         AddScore(powerup.scoreValue);
                         yield return null;
                         break;
-                    }          
-                    
+                    }
+
                     Shields shields = Instantiate(_shieldPrefab, this.transform.position, Quaternion.identity)
                         .GetComponent<Shields>();
                     shields.SetOwner(transform, "Shields");
                     _hasShields = true;
-                    shields.ShieldLives = (int) powerup.magnitude;
-                    UIManager uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
-                    uimanager.ActivateShieldBarActivation();
+                    shields.ShieldLives = (int)powerup.magnitude;
+                    _uiman.ActivateShieldBarActivation();
 
                     float time = powerup.duration;
                     while (time > 0)
@@ -304,18 +297,18 @@ public class Player : MonoBehaviour
                         time -= 0.1f;
                         if (time < 0)
                             time = 0f;
-                        uimanager.GetShieldBarText().text = "Shield Time: " + time.ToString("N1");
+                        _uiman.GetShieldBarText().text = "Shield Time: " + time.ToString("N1");
                         yield return new WaitForSeconds(0.1f);
                     }
 
-                    uimanager.DeactivateShieldBarActivation();
+                    _uiman.DeactivateShieldBarActivation();
                     _hasShields = false;
                     shields.Destroy();
                     break;
                 }
             case "ammo":
                 _ammo += (int)powerup.magnitude;
-                if(_ammo > 30)
+                if (_ammo > 30)
                 {
                     _ammo = 30;
                     AddScore(powerup.scoreValue);
@@ -340,9 +333,7 @@ public class Player : MonoBehaviour
     {
         Score += score;
         PlayerPrefs.SetInt("Score", Score);
-        UIManager ui = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if (ui != null)
-            ui.UpdateScoreText(Score);
+        _uiman.UpdateScoreText(Score);
     }
 
     public void addKill(int kill)
