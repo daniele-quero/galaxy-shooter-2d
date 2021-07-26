@@ -18,6 +18,7 @@ TagManager:
   - ppv
   - enemyLaser
   - thrusterBar
+  - ammo
   layers:
   - Default
   - TransparentFX

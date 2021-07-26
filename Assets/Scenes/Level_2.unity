@@ -863,6 +863,7 @@ MonoBehaviour:
   - 8
   - 10
   enemySpawnRate: 4
+  ammoSpawnRate: 4
   enemyScore: 15
   enemyLives: 1
   isEnemyShooting: 1
@@ -3109,6 +3110,7 @@ MonoBehaviour:
   _powerUpRateMax: 8
   _asteroidRateMin: 4
   _asteroidRateMax: 10
+  _ammoRate: 5
   _enemyContainer: {fileID: 1965446387}
   _powerUpContainer: {fileID: 837734869}
   _asteroidContainer: {fileID: 1814434543}
@@ -3118,6 +3120,7 @@ MonoBehaviour:
   - {fileID: 7187496278690652434, guid: 23fe3ae6d10fc3f48ba6c72f629942cf, type: 3}
   - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}
   - {fileID: 8951456139931299886, guid: 12ad55362efdbae4ebcba0be0946bc41, type: 3}
+  _ammoPrefab: {fileID: 8043667017539851925, guid: d6f328947df59bd48856902ea8bd9ca5, type: 3}
   isSpawningEnemiesOverride: 1
   isSpawningPowerUpsOverride: 1
   isSpawningAsteroidsOverride: 1

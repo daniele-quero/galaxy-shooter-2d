@@ -9,8 +9,6 @@ public class PowerUp : MonoBehaviour, ISpawnable
     private float _speed = 6f;
     public float duration = 5f;
     public float magnitude = 3f;
-    public float boost = 1.5f;
-    public int shields = 2;
     public int scoreValue = 5;
     private SpawnLimit _spawnLimit = new SpawnLimit();
 

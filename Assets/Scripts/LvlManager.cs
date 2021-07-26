@@ -12,6 +12,7 @@ public class LvlManager : MonoBehaviour
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];
     public float enemySpawnRate;
+    public float ammoSpawnRate;
     public int enemyScore;
     public int enemyLives;
     public bool isEnemyShooting = false;
@@ -39,6 +40,7 @@ public class LvlManager : MonoBehaviour
         PlayerPrefs.DeleteKey("Engine1");
         PlayerPrefs.DeleteKey("Lives");
         PlayerPrefs.DeleteKey("Score");
+        PlayerPrefs.DeleteKey("ammo");
         PlayerPrefs.Save();
     }
 
