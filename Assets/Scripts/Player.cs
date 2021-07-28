@@ -46,7 +46,8 @@ public class Player : MonoBehaviour
     private Vector2 _laserSpawnPosition = new Vector2();
 
     [SerializeField]
-    private float _fireRate = 0.2f;
+    private float _fireRate = 0.2f,
+        _defaultFireRate = 0.2f;
     private float _nextFireTime = -1f;
 
     [SerializeField]
@@ -265,8 +266,10 @@ public class Player : MonoBehaviour
             case "deathRayPowerUp":
                 {
                     _hasDeathRay = true;
+                    _fireRate = 2.6f;
                     yield return new WaitForSeconds(powerup.duration);
                     _hasDeathRay = false;
+                    _fireRate = _defaultFireRate;
                     break;
                 }
             case "speedPowerUp":

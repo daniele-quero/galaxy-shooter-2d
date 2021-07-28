@@ -17,33 +17,24 @@ public class DeathRay : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        switch (collision.tag)
+        if (Time.time > _nextTime)
         {
-            case "enemy":
-                {
-                    if (Time.time > _nextTime)
-                    {
-                        _nextTime = Time.time + _hitRate;
-                        if (collision != null)
-                            collision.GetComponent<Enemy>().EnemyKill(true);
-                    }
-
-
+            _nextTime = Time.time + _hitRate;
+            switch (collision.tag)
+            {
+                case "enemy":
+                    collision.GetComponent<Enemy>().EnemyKill(true);
                     break;
-                }
-            case "asteroid":
-                {
-                    if (Time.time > _nextTime)
-                    {
-                        _nextTime = Time.time + _hitRate;
-                        if (collision != null)
-                            collision.GetComponent<Asteroid>().AsteroidDamage(true);
-                    }
 
+                case "asteroid":
+                    collision.GetComponent<Asteroid>().AsteroidDamage(true);
                     break;
-                }
-            default:
-                break;
+
+                default:
+                    break;
+            }
         }
     }
+
+
 }
