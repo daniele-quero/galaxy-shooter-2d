@@ -26,9 +26,12 @@ public class Enemy : MonoBehaviour, ISpawnable
     private LvlManager _lvlManager;
 
     public bool defaultLevelSettings = true;
+
     private bool _isShooting = false;
     private float _laserRateMin = 3f;
     private float _laserRateMax = 7f;
+    private bool _isOscillating = false;
+    private float _phase;
 
     [SerializeField]
     GameObject _laser;
@@ -63,6 +66,11 @@ public class Enemy : MonoBehaviour, ISpawnable
             _laserRateMax = _lvlManager.enemyLaserRate[1];
         }
 
+        _phase = Random.value;
+        if (_lvlManager.enemyOscillationProbability > 0
+            &&  _phase <= _lvlManager.enemyOscillationProbability)
+            _isOscillating = true;
+
         StartCoroutine(Shoot());
     }
 
@@ -76,6 +84,15 @@ public class Enemy : MonoBehaviour, ISpawnable
     private void Move()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        if (_isOscillating)
+            Oscillate();
+    }
+
+    private void Oscillate()
+    {
+        float a = _lvlManager.enemyOscillationAmplitude;
+        float w = _lvlManager.enemyOscillationFrequency;
+        transform.Translate(Vector3.right * a * Mathf.Sin(w * Time.time + _phase * Mathf.PI));
     }
 
     private IEnumerator Shoot()

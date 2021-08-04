@@ -990,6 +990,8 @@ MonoBehaviour:
   killTarget: 10
   enemySpeed: 6
   enemyLaserSpeed: 0
+  enemyOscillationFrequency: 0.8
+  enemyOscillationAmplitude: 0.01
   enemyLaserRate:
   - 0
   - 0
@@ -1007,6 +1009,7 @@ MonoBehaviour:
   - 25
   enemySpawnRate: 6
   ammoSpawnRate: 4
+  enemyOscillationProbability: 0.5
   enemyScore: 10
   enemyLives: 0
   isEnemyShooting: 0
@@ -1149,6 +1152,7 @@ MonoBehaviour:
   _hasShields: 0
   _hasDeathRay: 0
   _fireRate: 0.2
+  _defaultFireRate: 0.2
   _lives: 3
   Score: 0
   Kills: 0

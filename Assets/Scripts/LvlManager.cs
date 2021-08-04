@@ -8,6 +8,9 @@ public class LvlManager : MonoBehaviour
     public int killTarget;
     public float enemySpeed;
     public float enemyLaserSpeed;
+    public float enemyOscillationFrequency;
+    public float enemyOscillationAmplitude;
+
     public float[] enemyLaserRate = new float[2];
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];
@@ -15,9 +18,13 @@ public class LvlManager : MonoBehaviour
     public float[] DeathRaySpawnRate = new float[2];
     public float enemySpawnRate;
     public float ammoSpawnRate;
+    public float enemyOscillationProbability;
+
     public int enemyScore;
     public int enemyLives;
+
     public bool isEnemyShooting = false;
+
     public bool autoGeneration = false;
 
     void Start()
