@@ -870,8 +870,8 @@ MonoBehaviour:
   DeathRaySpawnRate:
   - 20
   - 25
+  ammoSpawnRate: 6
   enemySpawnRate: 4
-  ammoSpawnRate: 4
   enemyOscillationProbability: 0.7
   enemyScore: 15
   enemyLives: 1
