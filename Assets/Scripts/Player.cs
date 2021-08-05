@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
     public int Kills = 0;
 
     public int Lives { get => _lives; set => _lives = value; }
-    public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
+    //public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
     public float Speed { get => _speed; set => _speed = value; }
     public float DefaultSpeed { get => _defaultSpeed; set => _defaultSpeed = value; }
     public float MiniBoost { get => _miniBoost; set => _miniBoost = value; }
@@ -333,6 +333,11 @@ public class Player : MonoBehaviour
                 break;
             case "1up":
                 Repair((int)powerup.magnitude, powerup.scoreValue);
+                break;
+            case "fireRatePowerDown":
+                _fireRate = powerup.magnitude;
+                yield return new WaitForSeconds(powerup.duration);
+                _fireRate = _defaultFireRate;
                 break;
             default:
                 break;

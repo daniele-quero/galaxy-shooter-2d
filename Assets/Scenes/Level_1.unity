@@ -3234,6 +3234,7 @@ MonoBehaviour:
   - {fileID: 7187496278690652434, guid: 23fe3ae6d10fc3f48ba6c72f629942cf, type: 3}
   - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}
   - {fileID: 8951456139931299886, guid: 12ad55362efdbae4ebcba0be0946bc41, type: 3}
+  - {fileID: 9190492152237522103, guid: 99a07f613beb2f147b95b9541f507beb, type: 3}
   _ammoPrefab: {fileID: 8043667017539851925, guid: d6f328947df59bd48856902ea8bd9ca5, type: 3}
   _1upPrefab: {fileID: 4926720356299223991, guid: 04b04a3c61d9c434cac2e2150d277b97, type: 3}
   _deathRayPowerUpPrefab: {fileID: 8216553172441111020, guid: 079bc13a73c43b04ab8f19038ce266d3, type: 3}

@@ -22,6 +22,7 @@ TagManager:
   - 1up
   - deathRay
   - deathRayPowerUp
+  - fireRatePowerDown
   layers:
   - Default
   - TransparentFX
