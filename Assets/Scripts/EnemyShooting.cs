@@ -34,24 +34,22 @@ public class EnemyShooting : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
 
-            if (Engage(new string[] { "Player", "shields" }))
-            {
-                Vector2 laserSpawn = transform.position;
-                laserSpawn.y -= _enemy.movement.SpawnLimit.YOff;
-                GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
-                foreach (var las in enemyLaser.GetComponentsInChildren<Laser>())
-                    las.SetEnemyLaser();
+            Vector2 direction = Vector2.down;
+            if (Engage(new string[] { "Player", "shields" }, direction))
+                LaserShooting(direction);
 
-                _enemy._sounds["laser"].Play();
-            }
+            direction = Vector2.up;
+            if (Engage(new string[] { "Player", "shields" }, direction))
+                LaserShooting(direction);
+
         }
     }
 
-    private bool Engage(string[] otherTags)
+    private bool Engage(string[] otherTags, Vector2 direction)
     {
         Vector2 origin = transform.position;
-        origin.y -= _enemy.movement.SpawnLimit.YOff;
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down);
+        origin.y += LaserOffset(direction);
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction);
         Debug.DrawRay(origin, Vector2.down);
         if (hit.collider != null)
         {
@@ -61,5 +59,21 @@ public class EnemyShooting : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void LaserShooting(Vector2 direction)
+    {
+        Vector2 laserSpawn = transform.position;
+        laserSpawn.y += LaserOffset(direction);
+        GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
+        foreach (var las in enemyLaser.GetComponentsInChildren<Laser>())
+            las.SetEnemyLaser(direction);
+
+        _enemy._sounds["laser"].Play();
+    }
+
+    private float LaserOffset(Vector2 direction)
+    {
+        return direction.y * _enemy.movement.SpawnLimit.YOff;
     }
 }

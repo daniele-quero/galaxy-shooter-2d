@@ -50,9 +50,11 @@ public class Laser : MonoBehaviour
         }
     }
 
-    public void SetEnemyLaser()
+    public void SetEnemyLaser(Vector2 direction)
     {
         this.tag = "enemyLaser";
-        _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
+        
+        if(Vector2.down.Equals(direction))
+            _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
     }
 }
