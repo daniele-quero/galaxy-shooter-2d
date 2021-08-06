@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1018390419270717338}
   - component: {fileID: 5119812634561903033}
+  - component: {fileID: -3573100057592341067}
+  - component: {fileID: 2690246860766688064}
   - component: {fileID: 388047104}
   - component: {fileID: -1203396979730273308}
   - component: {fileID: 4363347179537445224}
@@ -50,10 +52,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb4b5add2e388b4a84cc5ab640bcc21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 6.5
   _scoreValue: 10
   _lives: 0
+  animator: {fileID: 0}
+  lvlManager: {fileID: 0}
   defaultLevelSettings: 1
+  _movement: {fileID: 0}
+--- !u!114 &-3573100057592341067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130679818690967717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5654d5980ec329748a5b1a18486d0882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isOscillating: 0
+  _phase: 0
+  _speed: 0
+  cameraBounds: {fileID: 0}
+--- !u!114 &2690246860766688064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130679818690967717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e737c6d1ada634ab03eba40a956996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isShooting: 0
   _laser: {fileID: 2959102916945858817, guid: 8a656c049a803a9479f5e9b5a008c9de, type: 3}
 --- !u!50 &388047104
 Rigidbody2D:

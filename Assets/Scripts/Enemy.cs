@@ -4,47 +4,24 @@ using UnityEngine;
 using CustomInterfaces;
 using UnityEngine.SceneManagement;
 
-public class Enemy : MonoBehaviour, ISpawnable
+public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 4f;
-
-    private CameraBounds _cameraBounds = null;
-    private SpriteRenderer _spriteRenderer;
-    private Vector3 _respawnPosition = new Vector3(0, 0, 0);
-    private SpawnLimit _spawnLimit = new SpawnLimit();
-
     [SerializeField]
     private int _scoreValue = 10,
         _lives = 0;
 
-    public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
-
-    Animator _animator;
     private AudioSource[] _sources;
-    private Dictionary<string, AudioSource> _sounds;
-    private LvlManager _lvlManager;
 
-    public bool defaultLevelSettings = true;
-
-    private bool _isShooting = false;
-    private float _laserRateMin = 3f;
-    private float _laserRateMax = 7f;
-    private bool _isOscillating = false;
-    private float _phase;
-
-    [SerializeField]
-    GameObject _laser;
+    public Animator animator;
+    public Dictionary<string, AudioSource> _sounds;
+    public LvlManager lvlManager;
+    public EnemyMovement movement;
 
     void Start()
     {
-        _animator = GetComponent<Animator>();
-        Utilities.CheckNullGrabbed(_animator, "Animator");
-        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
-        if (camObj != null)
-            _cameraBounds = camObj.GetComponent<CameraBounds>();
-        else
-            Utilities.LogNullGrabbed("Camera");
+        animator = GetComponent<Animator>();
+        Utilities.CheckNullGrabbed(animator, "Animator");
+        movement = GetComponent<EnemyMovement>();
 
         _sources = GetComponents<AudioSource>();
         _sounds = new Dictionary<string, AudioSource>()
@@ -54,92 +31,10 @@ public class Enemy : MonoBehaviour, ISpawnable
             ["laser"] = _sources[2],
         };
 
-        _lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+        lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
 
-        if (defaultLevelSettings)
-        {
-            _speed = _lvlManager.enemySpeed;
-            _lives = _lvlManager.enemyLives;
-            _scoreValue = _lvlManager.enemyScore;
-            _isShooting = _lvlManager.isEnemyShooting;
-            _laserRateMin = _lvlManager.enemyLaserRate[0];
-            _laserRateMax = _lvlManager.enemyLaserRate[1];
-        }
-
-        _phase = Random.value;
-        if (_lvlManager.enemyOscillationProbability > 0
-            &&  _phase <= _lvlManager.enemyOscillationProbability)
-            _isOscillating = true;
-
-        StartCoroutine(Shoot());
-    }
-
-    void Update()
-    {
-        Move();
-        RespawnAtTop();
-        Shoot();
-    }
-
-    private void Move()
-    {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        if (_isOscillating)
-            Oscillate();
-    }
-
-    private void Oscillate()
-    {
-        float a = _lvlManager.enemyOscillationAmplitude;
-        float w = _lvlManager.enemyOscillationFrequency;
-        transform.Translate(Vector3.right * a * Mathf.Sin(w * Time.time + _phase * Mathf.PI));
-    }
-
-    private IEnumerator Shoot()
-    {
-        while (_isShooting)
-        {
-            yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
-
-            if (Engage(new string[]{"Player", "shields"}))
-            {
-                Vector2 laserSpawn = transform.position;
-                laserSpawn.y -= _spawnLimit.YOff;
-                GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
-                foreach(var las in enemyLaser.GetComponentsInChildren<Laser>())
-                    las.SetEnemyLaser();
-
-                _sounds["laser"].Play();
-            }
-        }
-    }
-
-    private bool Engage(string[] otherTags)
-    {
-        Vector2 origin = transform.position;
-        origin.y -= _spawnLimit.YOff;
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down);
-
-        if (hit.collider != null)
-        {
-            foreach (var ot in otherTags)
-                if (hit.collider.tag == ot)
-                    return true; 
-        }
-
-        return  false;
-    }
-
-    public void RespawnAtTop()
-    {
-        _spawnLimit = SpawnLimit;
-
-        if (transform.position.y <= _spawnLimit.YMin && _animator.GetCurrentAnimatorStateInfo(0).IsName("enemy_ok"))
-        {
-            _respawnPosition.y = _spawnLimit.YMax;
-            _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
-            transform.position = _respawnPosition;
-        }
+        _lives = lvlManager.enemyLives;
+        _scoreValue = lvlManager.enemyScore;
     }
 
     private void EnemyDamageBase()
@@ -160,7 +55,7 @@ public class Enemy : MonoBehaviour, ISpawnable
             {
                 player.AddScore(_scoreValue);
                 player.addKill(1);
-                if(isRam)
+                if (isRam)
                     player.Damage(1, transform.position.x);
             }
         }
@@ -205,19 +100,17 @@ public class Enemy : MonoBehaviour, ISpawnable
 
     public void EnemyDeath()
     {
-        AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        if (name.Contains("Fighter"))
+            transform.localScale *= 2f;
+
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
         GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
-        _animator.SetTrigger("onEnemyDeath");
-        _cameraBounds.CameraShake();
+        animator.SetTrigger("onEnemyDeath");
+        movement.cameraBounds.CameraShake();
         GetComponent<Collider2D>().enabled = false;
-        _speed *= 0.75f;
+        movement.ScaleSpeed(0.75f);
         _sounds["explosion"].Play();
         SelfDestroy(clips[0].length);
-    }
-
-    public SpawnLimit CalculateSpawnLimits()
-    {
-        return _spawnLimit.Calculate(gameObject, _spriteRenderer, _cameraBounds);
     }
 
     private void SelfDestroy()

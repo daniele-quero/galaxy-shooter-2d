@@ -991,7 +991,7 @@ MonoBehaviour:
   enemySpeed: 6
   enemyLaserSpeed: 0
   enemyOscillationFrequency: 0.8
-  enemyOscillationAmplitude: 0.01
+  enemyOscillationAmplitude: 0.05
   enemyLaserRate:
   - 0
   - 0
@@ -1009,6 +1009,7 @@ MonoBehaviour:
   - 25
   ammoSpawnRate: 4
   enemySpawnRate: 6
+  fighterSpawnProbability: 0
   enemyOscillationProbability: 0.5
   enemyScore: 10
   enemyLives: 0

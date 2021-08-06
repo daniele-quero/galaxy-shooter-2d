@@ -19,6 +19,7 @@ public class LvlManager : MonoBehaviour
     public float ammoSpawnRate;
 
     public float enemySpawnRate;
+    public float fighterSpawnProbability;
     public float enemyOscillationProbability;
 
     public int enemyScore;

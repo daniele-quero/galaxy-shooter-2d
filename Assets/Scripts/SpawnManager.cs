@@ -26,7 +26,7 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 _position = Vector3.zero;
     private Player _player = null;
-    private Enemy _enemy = null;
+    private EnemyMovement _enemy = null;
 
     public bool isSpawningEnemiesOverride = true;
     public bool isSpawningPowerUpsOverride = true;
@@ -38,8 +38,8 @@ public class SpawnManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         Utilities.CheckNullGrabbed(_player, "Player Script");
 
-        _enemy = _enemyPrefab.GetComponent<Enemy>();
-        Utilities.CheckNullGrabbed(_enemy, "Enemy Script");
+        _enemy = _enemyPrefab.GetComponent<EnemyMovement>();
+        Utilities.CheckNullGrabbed(_enemy, "Enemy Movement Script");
 
         if (defaultLevelSettings)
         {
