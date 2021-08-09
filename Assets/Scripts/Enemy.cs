@@ -69,6 +69,11 @@ public class Enemy : MonoBehaviour
     {
         switch (collision.tag)
         {
+            case "torpedo":
+                {
+                    _lives--;
+                    goto case "laser";
+                }
             case "laser":
                 {
                     GameObject.Destroy(collision.gameObject);
@@ -108,7 +113,7 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("onEnemyDeath");
         movement.cameraBounds.CameraShake();
         GetComponent<Collider2D>().enabled = false;
-        movement.ScaleSpeed(0.75f);
+        movement.OverrideSpeed(3f);
         _sounds["explosion"].Play();
         SelfDestroy(clips[0].length);
     }

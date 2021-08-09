@@ -22,11 +22,12 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> _powerUpPrefabs;
 
     [SerializeField]
-    private GameObject _ammoPrefab, _1upPrefab, _deathRayPowerUpPrefab;
+    private GameObject _ammoPrefab, _1upPrefab, _deathRayPowerUpPrefab, _torpedoPowerUp;
 
     private Vector3 _position = Vector3.zero;
     private Player _player = null;
     private EnemyMovement _enemy = null;
+    private LvlManager _lvl;
 
     public bool isSpawningEnemiesOverride = true;
     public bool isSpawningPowerUpsOverride = true;
@@ -41,30 +42,32 @@ public class SpawnManager : MonoBehaviour
         _enemy = _enemyPrefab.GetComponent<EnemyMovement>();
         Utilities.CheckNullGrabbed(_enemy, "Enemy Movement Script");
 
-        if (defaultLevelSettings)
-        {
-            LvlManager lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
-            _enemyRate = lvlManager.enemySpawnRate;
-            _ammoRate = lvlManager.ammoSpawnRate;
-            _powerUpRateMin = lvlManager.powerUpSpawnRate[0];
-            _powerUpRateMax = lvlManager.powerUpSpawnRate[1];
-            _1upRateMin = lvlManager.oneUpSpawnRate[0];
-            _1upRateMax = lvlManager.oneUpSpawnRate[1];
-            _asteroidRateMin = lvlManager.asteroidSpawnRate[0];
-            _asteroidRateMax = lvlManager.asteroidSpawnRate[1];
-            _deathRayRateMin = lvlManager.DeathRaySpawnRate[0];
-            _deathRayRateMax = lvlManager.DeathRaySpawnRate[1];
-        }
 
-        StartCoroutine(SpawnEnemy(_enemyRate, _enemyPrefab));
-        StartCoroutine(SpawnAsteroids(_asteroidRateMin, _asteroidRateMax, _asteroidPrefab));
+        _lvl = GameObject.Find("LevelManager").GetComponent<LvlManager>();
+        //_enemyRate = _lvl.enemySpawnRate;
+        //_ammoRate = _lvl.ammoSpawnRate;
+        //_powerUpRateMin = _lvl.powerUpSpawnRate[0];
+        //_powerUpRateMax = _lvl.powerUpSpawnRate[1];
+        //_1upRateMin = _lvl.oneUpSpawnRate[0];
+        //_1upRateMax = _lvl.oneUpSpawnRate[1];
+        //_asteroidRateMin = _lvl.asteroidSpawnRate[0];
+        //_asteroidRateMax = _lvl.asteroidSpawnRate[1];
+        //_deathRayRateMin = _lvl.torpedoSpawnRate[0];
+        //_deathRayRateMax = _lvl.torpedoSpawnRate[1];
 
-        StartCoroutine(SpawnSingleRatePowerUp(_ammoRate, _ammoPrefab));      
-        StartCoroutine(SpawnPowerUps(_1upRateMin, _1upRateMax, _1upPrefab));
-        StartCoroutine(SpawnPowerUps(_deathRayRateMin, _deathRayRateMax, _deathRayPowerUpPrefab));
+
+        StartCoroutine(SpawnEnemy(_lvl.enemySpawnRate, _enemyPrefab));
+
+        StartCoroutine(SpawnAsteroids(_lvl.asteroidSpawnRate[0], _lvl.asteroidSpawnRate[1], _asteroidPrefab));
+
+        StartCoroutine(SpawnSingleRatePowerUp(_lvl.ammoSpawnRate, _ammoPrefab));
+
+        StartCoroutine(SpawnPowerUps(_lvl.oneUpSpawnRate[0], _lvl.oneUpSpawnRate[1], _1upPrefab));
+        StartCoroutine(SpawnPowerUps(_lvl.deathRaySpawnRate[0], _lvl.deathRaySpawnRate[1], _deathRayPowerUpPrefab));
+        StartCoroutine(SpawnPowerUps(_lvl.torpedoSpawnRate[0], _lvl.torpedoSpawnRate[1], _torpedoPowerUp));
 
         foreach (GameObject powerUp in _powerUpPrefabs)
-            StartCoroutine(SpawnPowerUps(_powerUpRateMin, _powerUpRateMax, powerUp));
+            StartCoroutine(SpawnPowerUps(_lvl.powerUpSpawnRate[0], _lvl.powerUpSpawnRate[1], powerUp));
 
     }
 
@@ -148,7 +151,7 @@ public class SpawnManager : MonoBehaviour
                 }
 
                 yield return new WaitForSeconds(rate);
-                
+
                 Instantiate(asteroid, _position, Quaternion.identity).transform.SetParent(_asteroidContainer.transform);
 
             }

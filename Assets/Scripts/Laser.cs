@@ -56,5 +56,7 @@ public class Laser : MonoBehaviour
         
         if(Vector2.down.Equals(direction))
             _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
+        else
+            _speed = -GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
     }
 }

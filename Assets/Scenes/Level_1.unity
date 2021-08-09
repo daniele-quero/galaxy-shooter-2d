@@ -995,6 +995,15 @@ MonoBehaviour:
   enemyLaserRate:
   - 0
   - 0
+  enemySpawnRate: 6
+  enemyOscillationProbability: 0.5
+  enemyScore: 10
+  enemyLives: 0
+  isEnemyShooting: 0
+  fighterSpawnProbability: 0
+  fighterSpeed: 0
+  fighterTorpedoRate: 0
+  fighterLives: 0
   powerUpSpawnRate:
   - 5.1
   - 8
@@ -1004,17 +1013,13 @@ MonoBehaviour:
   oneUpSpawnRate:
   - 15
   - 25
-  DeathRaySpawnRate:
+  deathRaySpawnRate:
   - 20
   - 25
+  torpedoSpawnRate:
+  - 10
+  - 15
   ammoSpawnRate: 4
-  enemySpawnRate: 6
-  fighterSpawnProbability: 0
-  enemyOscillationProbability: 0.5
-  enemyScore: 10
-  enemyLives: 0
-  isEnemyShooting: 0
-  autoGeneration: 0
 --- !u!4 &894683589
 Transform:
   m_ObjectHideFlags: 0
@@ -1047,6 +1052,7 @@ GameObject:
   - component: {fileID: 996177603}
   - component: {fileID: 996177602}
   - component: {fileID: 996177601}
+  - component: {fileID: 996177605}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1152,11 +1158,13 @@ MonoBehaviour:
   _hasMegaBoost: 0
   _hasShields: 0
   _hasDeathRay: 0
+  _hasTorpedo: 0
   _fireRate: 0.2
   _defaultFireRate: 0.2
   _lives: 3
   Score: 0
   Kills: 0
+  _torpedoPrefab: {fileID: 1620099141931234, guid: 248aee824083cee41827664f689a8b79, type: 3}
 --- !u!60 &996177598
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1621,6 +1629,102 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &996177605
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996177594}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 8401456349c492a489ed90469e317e43, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3239,6 +3343,7 @@ MonoBehaviour:
   _ammoPrefab: {fileID: 8043667017539851925, guid: d6f328947df59bd48856902ea8bd9ca5, type: 3}
   _1upPrefab: {fileID: 4926720356299223991, guid: 04b04a3c61d9c434cac2e2150d277b97, type: 3}
   _deathRayPowerUpPrefab: {fileID: 8216553172441111020, guid: 079bc13a73c43b04ab8f19038ce266d3, type: 3}
+  _torpedoPowerUp: {fileID: 942287664840801041, guid: aa3fef162afc38c4183c43f0f28e2cfa, type: 3}
   isSpawningEnemiesOverride: 1
   isSpawningPowerUpsOverride: 1
   isSpawningAsteroidsOverride: 1

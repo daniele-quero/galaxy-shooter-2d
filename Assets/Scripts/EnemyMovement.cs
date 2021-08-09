@@ -76,8 +76,8 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
         }
     }
 
-    public void ScaleSpeed(float factor)
+    public void OverrideSpeed(float newSpeed)
     {
-        _speed *= factor;
+        _speed = newSpeed;
     }
 }

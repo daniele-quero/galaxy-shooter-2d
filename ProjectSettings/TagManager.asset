@@ -23,6 +23,9 @@ TagManager:
   - deathRay
   - deathRayPowerUp
   - fireRatePowerDown
+  - torpedo
+  - enemyTorpedo
+  - torpedoPowerUp
   layers:
   - Default
   - TransparentFX

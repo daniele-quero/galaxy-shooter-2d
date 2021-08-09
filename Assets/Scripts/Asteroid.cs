@@ -104,6 +104,11 @@ public class Asteroid : MonoBehaviour, ISpawnable
     {
         switch (collision.tag)
         {
+            case "torpedo":
+                {
+                    _lives--;
+                    goto case "laser";
+                }
             case "laser":
                 {
                     AsteroidDamage();

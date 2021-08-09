@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class Fighter : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    private float _speed;
+
     void Start()
     {
-        Debug.Log("figher "+ Time.time.ToString("0.00000"));
+        _speed = GetComponent<Enemy>().lvlManager.fighterSpeed;
+        GetComponent<EnemyMovement>().OverrideSpeed(_speed);
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        FighterSpecialMove();
     }
+
+    private void FighterSpecialMove()
+    {
+        transform.Translate(Vector3.down * 0.2f * Mathf.Sin(Time.time));
+    }
+
 }

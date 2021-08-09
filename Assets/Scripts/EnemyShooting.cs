@@ -18,16 +18,14 @@ public class EnemyShooting : MonoBehaviour
     void Start()
     {
         _enemy = GetComponent<Enemy>();
+
         _isShooting = _enemy.lvlManager.isEnemyShooting;
         _laserRateMin = _enemy.lvlManager.enemyLaserRate[0];
         _laserRateMax = _enemy.lvlManager.enemyLaserRate[1];
+
         StartCoroutine(Shoot());
     }
 
-    void Update()
-    {
-        
-    }
     private IEnumerator Shoot()
     {
         while (_isShooting)

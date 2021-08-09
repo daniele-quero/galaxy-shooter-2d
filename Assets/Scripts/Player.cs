@@ -32,7 +32,8 @@ public class Player : MonoBehaviour
     private bool _hasTripleShot = false,
         _hasMegaBoost = false,
         _hasShields = false,
-        _hasDeathRay = false;
+        _hasDeathRay = false,
+        _hasTorpedo = false;
 
     private SpriteRenderer _spriteRenderer;
     private CameraBounds _cameraBounds = null;
@@ -56,6 +57,9 @@ public class Player : MonoBehaviour
     public int Score = 0;
     public int Kills = 0;
 
+    [SerializeField]
+    private GameObject _torpedoPrefab;
+
     public int Lives { get => _lives; set => _lives = value; }
     //public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
     public float Speed { get => _speed; set => _speed = value; }
@@ -73,7 +77,8 @@ public class Player : MonoBehaviour
             ["laser"] = _sources[0],
             ["explosion"] = _sources[1],
             ["damage"] = _sources[2],
-            ["noammo"] = _sources[3]
+            ["noammo"] = _sources[3],
+            ["torpedo"] = _sources[4]
         };
 
         GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
@@ -141,21 +146,37 @@ public class Player : MonoBehaviour
             _laserSpawnPosition.y += _spriteRenderer.sprite.rect.size.y / 2 / _spriteRenderer.sprite.pixelsPerUnit * transform.lossyScale.y;
 
             _shot = _laserPrefab;
+            AudioSource shootSound = _sounds["laser"];
+            int ammoConsumed = 1;
+
             if (_hasTripleShot)
+            {
                 _shot = _tripleShotPrefab;
+                ammoConsumed = 3;
+            }
 
             else if (_hasDeathRay)
+            {
                 _shot = _deathRayPrefab;
+                ammoConsumed = 0;
+            }
+
+            else if (_hasTorpedo)
+            {
+                _shot = _torpedoPrefab;
+                shootSound = _sounds["torpedo"];
+                ammoConsumed = 2;
+            }
 
             if (_shot != null && Time.time > _nextFireTime)
             {
-                if (_ammo > 0)
+                if (_ammo >= ammoConsumed)
                 {
-                    _ammo--;
+                    _ammo -= ammoConsumed;
                     PlayerPrefs.SetInt("ammo", _ammo);
                     _nextFireTime = Time.time + _fireRate;
                     Instantiate(_shot, _laserSpawnPosition, Quaternion.identity);
-                    _sounds["laser"].Play();
+                    shootSound.Play();
                     _uiman.UpdateAmmoText(_ammo, _maxAmmo);
                 }
                 else
@@ -272,6 +293,13 @@ public class Player : MonoBehaviour
                     _fireRate = _defaultFireRate;
                     break;
                 }
+            case "torpedoPowerUp":
+                {
+                    _hasTorpedo = true;
+                    yield return new WaitForSeconds(powerup.duration);
+                    _hasTorpedo = false;
+                    break;
+                }
             case "speedPowerUp":
                 {
                     if (_hasMegaBoost)
@@ -367,6 +395,11 @@ public class Player : MonoBehaviour
     {
         switch (collision.tag)
         {
+            case "enemyTorpedo":
+                {
+                    Damage(1, collision.transform.position.x);
+                    goto case "enemyLaser";
+                }
             case "enemyLaser":
                 Damage(1, collision.transform.position.x);
                 GameObject.Destroy(collision.gameObject);

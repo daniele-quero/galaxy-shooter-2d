@@ -6,38 +6,35 @@ using UnityEngine.SceneManagement;
 public class LvlManager : MonoBehaviour
 {
     public int killTarget;
+
     public float enemySpeed;
     public float enemyLaserSpeed;
     public float enemyOscillationFrequency;
     public float enemyOscillationAmplitude;
-
     public float[] enemyLaserRate = new float[2];
+    public float enemySpawnRate;
+    public float enemyOscillationProbability;
+    public int enemyScore;
+    public int enemyLives;
+    public bool isEnemyShooting = false;
+
+    public float fighterSpawnProbability;
+    public float fighterSpeed;
+    public float fighterTorpedoRate;
+    public float fighterLives;
+
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];
     public float[] oneUpSpawnRate = new float[2];
-    public float[] DeathRaySpawnRate = new float[2];
+    public float[] deathRaySpawnRate = new float[2];
+    public float[] torpedoSpawnRate = new float[2];
     public float ammoSpawnRate;
-
-    public float enemySpawnRate;
-    public float fighterSpawnProbability;
-    public float enemyOscillationProbability;
-
-    public int enemyScore;
-    public int enemyLives;
-
-    public bool isEnemyShooting = false;
-
-    public bool autoGeneration = false;
 
     void Start()
     {
         GameObject.Find("Main Camera").GetComponent<AudioSource>().time = PlayerPrefs.GetFloat("BkgMusic", 0);
     }
 
-    void Update()
-    {
-
-    }
     private void OnApplicationQuit()
     {
         PlayerPrefClear();
