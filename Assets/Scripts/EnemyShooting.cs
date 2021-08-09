@@ -33,7 +33,7 @@ public class EnemyShooting : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
 
             Vector2 direction = Vector2.down;
-            if (Engage(new string[] { "Player", "shields" }, direction))
+            if (Engage(new string[] { "Player", "shields", "PowerUp" }, direction))
                 LaserShooting(direction);
 
             direction = Vector2.up;
@@ -52,7 +52,7 @@ public class EnemyShooting : MonoBehaviour
         if (hit.collider != null)
         {
             foreach (var ot in otherTags)
-                if (hit.collider.tag == ot)
+                if (hit.collider.tag.Contains(ot))
                     return true;
         }
 
