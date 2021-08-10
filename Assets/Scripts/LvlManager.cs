@@ -14,6 +14,7 @@ public class LvlManager : MonoBehaviour
     public float[] enemyLaserRate = new float[2];
     public float enemySpawnRate;
     public float enemyOscillationProbability;
+    public float enemyDodgeProbability;
     public int enemyScore;
     public int enemyLives;
     public bool isEnemyShooting = false;

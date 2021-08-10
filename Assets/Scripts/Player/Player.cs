@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
         _tripleShotPrefab = null,
         _shieldPrefab = null,
         _deathRayPrefab = null,
+        _torpedoPrefab = null,
         _shot;
 
     [SerializeField]
@@ -57,11 +58,7 @@ public class Player : MonoBehaviour
     public int Score = 0;
     public int Kills = 0;
 
-    [SerializeField]
-    private GameObject _torpedoPrefab;
-
     public int Lives { get => _lives; set => _lives = value; }
-    //public bool HasTripleShot { get => _hasTripleShot; set => _hasTripleShot = value; }
     public float Speed { get => _speed; set => _speed = value; }
     public float DefaultSpeed { get => _defaultSpeed; set => _defaultSpeed = value; }
     public float MiniBoost { get => _miniBoost; set => _miniBoost = value; }

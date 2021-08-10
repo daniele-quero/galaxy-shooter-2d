@@ -14,10 +14,12 @@ public class EnemyShooting : MonoBehaviour
     private GameObject _laser;
 
     private Enemy _enemy;
+    private EnemyTargetingSystem _targeting;
 
     void Start()
     {
         _enemy = GetComponent<Enemy>();
+        _targeting = GetComponent<EnemyTargetingSystem>();
 
         _isShooting = _enemy.lvlManager.isEnemyShooting;
         _laserRateMin = _enemy.lvlManager.enemyLaserRate[0];
@@ -33,45 +35,24 @@ public class EnemyShooting : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(_laserRateMin, _laserRateMax));
 
             Vector2 direction = Vector2.down;
-            if (Engage(new string[] { "Player", "shields", "PowerUp" }, direction))
+            if (_targeting.Engage(new string[] { "Player", "shields", "PowerUp" }, direction))
                 LaserShooting(direction);
 
             direction = Vector2.up;
-            if (Engage(new string[] { "Player", "shields" }, direction))
+            if (_targeting.Engage(new string[] { "Player", "shields" }, direction))
                 LaserShooting(direction);
 
         }
-    }
-
-    private bool Engage(string[] otherTags, Vector2 direction)
-    {
-        Vector2 origin = transform.position;
-        origin.y += LaserOffset(direction);
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction);
-        Debug.DrawRay(origin, Vector2.down);
-        if (hit.collider != null)
-        {
-            foreach (var ot in otherTags)
-                if (hit.collider.tag.Contains(ot))
-                    return true;
-        }
-
-        return false;
     }
 
     private void LaserShooting(Vector2 direction)
     {
         Vector2 laserSpawn = transform.position;
-        laserSpawn.y += LaserOffset(direction);
+        laserSpawn.y += _targeting.YOffset(direction);
         GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
         foreach (var las in enemyLaser.GetComponentsInChildren<Laser>())
             las.SetEnemyLaser(direction);
 
         _enemy._sounds["laser"].Play();
-    }
-
-    private float LaserOffset(Vector2 direction)
-    {
-        return direction.y * _enemy.movement.SpawnLimit.YOff;
     }
 }

@@ -860,6 +860,7 @@ MonoBehaviour:
   - 5
   enemySpawnRate: 4
   enemyOscillationProbability: 0.7
+  enemyDodgeProbability: 0.5
   enemyScore: 15
   enemyLives: 1
   isEnemyShooting: 1
@@ -1016,6 +1017,7 @@ MonoBehaviour:
   _tripleShotPrefab: {fileID: 1339682491742955184, guid: a3ecfd7555a569845898d189ff94c497, type: 3}
   _shieldPrefab: {fileID: 7780092348924507214, guid: ad6f4c52dce3a2f4b914a84508c1c6fc, type: 3}
   _deathRayPrefab: {fileID: 4981435377150880204, guid: d5d9163dc5710444197f00fb2ae81654, type: 3}
+  _torpedoPrefab: {fileID: 1620099141931234, guid: 248aee824083cee41827664f689a8b79, type: 3}
   _shot: {fileID: 0}
   _hasTripleShot: 0
   _hasMegaBoost: 0
@@ -1027,7 +1029,6 @@ MonoBehaviour:
   _lives: 3
   Score: 0
   Kills: 0
-  _torpedoPrefab: {fileID: 1620099141931234, guid: 248aee824083cee41827664f689a8b79, type: 3}
 --- !u!60 &996177598
 PolygonCollider2D:
   m_ObjectHideFlags: 0

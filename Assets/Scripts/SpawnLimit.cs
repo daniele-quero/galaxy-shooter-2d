@@ -9,6 +9,7 @@ public class SpawnLimit
     private float _xMax;
     private float _yOff;
     private float _xOff;
+    private Vector2 _off;
 
     public float YMin { get => _yMin; set => _yMin = value; }
     public float XMin { get => _xMin; set => _xMin = value; }
@@ -16,6 +17,7 @@ public class SpawnLimit
     public float YMax { get => _yMax; set => _yMax = value; }
     public float YOff { get => _yOff; set => _yOff = value; }
     public float XOff { get => _xOff; set => _xOff = value; }
+    public Vector2 Off { get => _off; set => _off = value; }
 
     public SpawnLimit Calculate(GameObject gameObject, SpriteRenderer spriteRenderer, CameraBounds cameraBounds)
     {
@@ -32,6 +34,7 @@ public class SpawnLimit
         this.YMin = -cameraBounds.CameraVisual.y - YOff;
         this.XMin = -cameraBounds.CameraVisual.x + XOff;
         this.XMax = cameraBounds.CameraVisual.x - XOff;
+        this.Off = new Vector2(XOff, YOff);
         return this;
     }
 }

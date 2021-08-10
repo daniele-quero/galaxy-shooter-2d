@@ -79,6 +79,12 @@ public class PowerUp : MonoBehaviour, ISpawnable
             case "deathRay":
                 DestroyPowerUp();
                 break;
+            case "enemyLaser":
+                {
+                    scoreValue = 0;
+                    DestroyPowerUp();
+                    break;
+                }
             default:
                 break;
         }        

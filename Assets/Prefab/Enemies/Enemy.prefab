@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5119812634561903033}
   - component: {fileID: -3573100057592341067}
   - component: {fileID: 2690246860766688064}
+  - component: {fileID: -7592321422995278935}
   - component: {fileID: 388047104}
   - component: {fileID: -1203396979730273308}
   - component: {fileID: 4363347179537445224}
@@ -56,8 +57,7 @@ MonoBehaviour:
   _lives: 0
   animator: {fileID: 0}
   lvlManager: {fileID: 0}
-  defaultLevelSettings: 1
-  _movement: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!114 &-3573100057592341067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +88,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isShooting: 0
   _laser: {fileID: 2959102916945858817, guid: 8a656c049a803a9479f5e9b5a008c9de, type: 3}
+--- !u!114 &-7592321422995278935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130679818690967717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29109e167b86b1144b08c85d100c4bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &388047104
 Rigidbody2D:
   serializedVersion: 4
