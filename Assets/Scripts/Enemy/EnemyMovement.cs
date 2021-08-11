@@ -100,21 +100,6 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
 
     }
 
-    private IEnumerator DodgeMovement()
-    {
-        int r = Random.Range(0, 2);
-        Vector3 direction = r == 0 ? Vector3.left : Vector3.right;
-        float duration = 0.5f;
-        float timeStep = 0.02f;
-        float timer = 0f;
-        while (timer <= duration)
-        {
-            transform.Translate(direction * _speed * 1.2f * timeStep);
-            timer += timeStep;
-            yield return new WaitForSeconds(timeStep);
-        }
-    }
-
     private void RamIntoPlayer()
     {
 
