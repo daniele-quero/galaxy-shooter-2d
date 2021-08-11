@@ -16,6 +16,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     private SpawnLimit _spawnLimit = new SpawnLimit();
     private Vector3 _respawnPosition = new Vector3(0, 0, 0);
     private SpriteRenderer _spriteRenderer;
+	private Transform _playerTransform;
 
     public CameraBounds cameraBounds = null;
 
@@ -38,6 +39,8 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
             cameraBounds = camObj.GetComponent<CameraBounds>();
         else
             Utilities.LogNullGrabbed("Camera");
+		
+		_playerTransform = GameObject.Find("Player").transform;
 
     }
 
@@ -87,8 +90,12 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     private void Dodge()
     {
         if (_target.Engage(new string[] { "laser", "deathRay", "torpedo" }, Vector2.down))
-            if (Random.Range(0f, 1f) <= _dodgeProbability)
-                StartCoroutine(DodgeMovement()); 
+            if (Random.Range(0f, 1f) <= _dodgeProbability){
+				int r = Random.Range(0, 2);
+        Vector3 direction = r == 0 ? Vector3.left : Vector3.right;
+		StartCoroutine(Move(direction, _speed * 1.2f, 0.5f));
+			}
+                
     }
 
     private IEnumerator DodgeMovement()
@@ -105,4 +112,25 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
             yield return new WaitForSeconds(timeStep);
         }
     }
+	
+	private void RamIntoPlayer(){
+		
+		if(Vector3.Distance(transform.position, _playerTransform.position) < 4)
+		{
+			Vector3 dir = _playerTransform.position -transform.position;
+			StartCoroutine(Move(dir, _speed, 0.5f));
+		}
+		
+	}
+	
+	private IEnumerator Move(Vector3 dir, float speed, float duration){
+        float timeStep = 0.02f;
+        float timer = 0f;
+        while (timer <= duration)
+        {
+            transform.Translate(dir * speed * timeStep);
+            timer += timeStep;
+            yield return new WaitForSeconds(timeStep);
+        }
+	}
 }

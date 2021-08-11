@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerCollectionManager : MonoBehaviour
 {
     private Player _player;
-    private bool _canAttract = true;
 
     void Start()
     {
@@ -126,7 +125,7 @@ public class PlayerCollectionManager : MonoBehaviour
 
     public void AttractPowerUps()
     {
-        if (_canAttract && _player.Score >0 && _player.pm.pim.collectButtonHeld)
+        if (_player.Score >0 && _player.pm.pim.collectButtonHeld)
         { 
             List<Transform> pups = GameObject.Find("PowerUpContainer").GetComponentsInChildren<Transform>().ToList();
             pups.RemoveAll(p => p.name == "PowerUpContainer");
