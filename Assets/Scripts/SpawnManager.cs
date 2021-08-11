@@ -5,14 +5,6 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private float _enemyRate = 5f,
-        _powerUpRateMin = 4f, _powerUpRateMax = 8f,
-        _asteroidRateMin = 8f, _asteroidRateMax = 10f,
-        _ammoRate = 5f,
-        _1upRateMin = 15f, _1upRateMax = 20f,
-        _deathRayRateMin = 20f, _deathRayRateMax = 25f;
-
-    [SerializeField]
     private GameObject _enemyContainer, _powerUpContainer, _asteroidContainer;
 
     [SerializeField]
@@ -44,17 +36,6 @@ public class SpawnManager : MonoBehaviour
 
 
         _lvl = GameObject.Find("LevelManager").GetComponent<LvlManager>();
-        //_enemyRate = _lvl.enemySpawnRate;
-        //_ammoRate = _lvl.ammoSpawnRate;
-        //_powerUpRateMin = _lvl.powerUpSpawnRate[0];
-        //_powerUpRateMax = _lvl.powerUpSpawnRate[1];
-        //_1upRateMin = _lvl.oneUpSpawnRate[0];
-        //_1upRateMax = _lvl.oneUpSpawnRate[1];
-        //_asteroidRateMin = _lvl.asteroidSpawnRate[0];
-        //_asteroidRateMax = _lvl.asteroidSpawnRate[1];
-        //_deathRayRateMin = _lvl.torpedoSpawnRate[0];
-        //_deathRayRateMax = _lvl.torpedoSpawnRate[1];
-
 
         StartCoroutine(SpawnEnemy(_lvl.enemySpawnRate, _enemyPrefab));
 

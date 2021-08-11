@@ -8,8 +8,6 @@ public class Torpedo : MonoBehaviour
     [SerializeField]
     private float _speed = 6f;
 
-    private float _boundOffset = 1f;
-
     private bool _isInitialSprint = true;
     private bool _isEnemy = false;
     private bool _outOfTime = false;
