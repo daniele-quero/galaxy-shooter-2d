@@ -7,11 +7,15 @@ public class Thruster : MonoBehaviour
     private Vector3 _defaultScale = new Vector3(1, 1, 1);
     private Color _white = Color.white;
     private Player _player;
+    private PlayerMovement _movement;
     private SimpleHealthBar _bar;
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         Utilities.CheckNullGrabbed(_player, "Player");
+
+        _movement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        Utilities.CheckNullGrabbed(_movement, "PlayerMovement");
 
         _bar = GameObject.FindGameObjectWithTag("thrusterBar").GetComponentInChildren<SimpleHealthBar>();
         Utilities.CheckNullGrabbed(_player, "Thruster Bar");
@@ -25,7 +29,7 @@ public class Thruster : MonoBehaviour
         if(_player.HasMegaBoost)
         {
             _bar.additionalText = "Mega Boost: ON ";
-            _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel); 
+            _bar.UpdateBar(_movement.CurrentBoostFuel, _movement.MaxBoostFuel); 
         }
     }
 
@@ -41,7 +45,7 @@ public class Thruster : MonoBehaviour
             RestoreThrusterVFX();
 
         _bar.additionalText = "Fuel: ";
-        _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
+        _bar.UpdateBar(_movement.CurrentBoostFuel, _movement.MaxBoostFuel);
     }
 
     public IEnumerator FadeThrusterVFX()
@@ -89,9 +93,9 @@ public class Thruster : MonoBehaviour
     {
         if (!_player.HasMegaBoost)
         {
-            if (_player.CurrentBoostFuel > 0 && Input.GetKeyDown(KeyCode.LeftShift))
+            if (_movement.CurrentBoostFuel > 0 && Input.GetKeyDown(KeyCode.LeftShift))
             {
-                _player.Speed = _player.MiniBoost;
+                _movement.Speed = _movement.MiniBoost;
                 ThrusterVFX(new Vector3(1f, 1.4f, 1f), Color.white);
                 StopCoroutine(RechargeFuel(0.05f));
                 StartCoroutine(ConsumeFuel(0.2f));
@@ -99,7 +103,7 @@ public class Thruster : MonoBehaviour
 
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                _player.Speed = _player.DefaultSpeed;
+                _movement.Speed = _movement.DefaultSpeed;
                 RestoreThrusterVFX();
                 StopCoroutine(ConsumeFuel(0.2f));
                 StartCoroutine(RechargeFuel(0.05f));
@@ -111,16 +115,16 @@ public class Thruster : MonoBehaviour
     {
         while (Input.GetKey(KeyCode.LeftShift))
         {
-            _player.CurrentBoostFuel -= f;
-            if (_player.CurrentBoostFuel <= 0)
+            _movement.CurrentBoostFuel -= f;
+            if (_movement.CurrentBoostFuel <= 0)
             {
-                _player.CurrentBoostFuel = 0;
-                _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
-                _player.Speed = _player.DefaultSpeed;
+                _movement.CurrentBoostFuel = 0;
+                _bar.UpdateBar(_movement.CurrentBoostFuel, _movement.MaxBoostFuel);
+                _movement.Speed = _movement.DefaultSpeed;
                 RestoreThrusterVFX();
                 break;
             }
-            _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
+            _bar.UpdateBar(_movement.CurrentBoostFuel, _movement.MaxBoostFuel);
             yield return new WaitForSeconds(0.1f);
         }
         RestoreThrusterVFX();
@@ -128,13 +132,13 @@ public class Thruster : MonoBehaviour
 
     private IEnumerator RechargeFuel(float f)
     {
-        while (!Input.GetKey(KeyCode.LeftShift) && _player.CurrentBoostFuel < _player.MaxBoostFuel)
+        while (!Input.GetKey(KeyCode.LeftShift) && _movement.CurrentBoostFuel < _movement.MaxBoostFuel)
         {
-            _player.CurrentBoostFuel += f;
-            if (_player.CurrentBoostFuel > _player.MaxBoostFuel)
-                _player.CurrentBoostFuel = _player.MaxBoostFuel;
+            _movement.CurrentBoostFuel += f;
+            if (_movement.CurrentBoostFuel > _movement.MaxBoostFuel)
+                _movement.CurrentBoostFuel = _movement.MaxBoostFuel;
 
-            _bar.UpdateBar(_player.CurrentBoostFuel, _player.MaxBoostFuel);
+            _bar.UpdateBar(_movement.CurrentBoostFuel, _movement.MaxBoostFuel);
             yield return new WaitForSeconds(0.1f);
         }
     }

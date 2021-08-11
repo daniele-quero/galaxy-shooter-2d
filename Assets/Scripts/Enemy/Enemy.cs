@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
             if (player != null)
             {
                 player.AddScore(_scoreValue);
-                player.addKill(1);
+                player.AddKill(1);
                 if (isRam)
                     player.Damage(1, transform.position.x);
             }
@@ -92,7 +92,7 @@ public class Enemy : MonoBehaviour
                     if (player != null)
                     {
                         player.AddScore(_scoreValue);
-                        player.addKill(1);
+                        player.AddKill(1);
                     }
 
                     EnemyDeath();

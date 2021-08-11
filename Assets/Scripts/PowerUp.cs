@@ -13,6 +13,8 @@ public class PowerUp : MonoBehaviour, ISpawnable
     private SpawnLimit _spawnLimit = new SpawnLimit();
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
+    public float Speed { get => _speed; set => _speed = value; }
+
     private CameraBounds _cameraBounds = null;
     private SpriteRenderer _spriteRenderer;
     private AudioSource[] _sources;
@@ -36,7 +38,7 @@ public class PowerUp : MonoBehaviour, ISpawnable
 
     private void Move()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.down * Speed * Time.deltaTime);
     }
 
     public SpawnLimit CalculateSpawnLimits()
@@ -61,10 +63,9 @@ public class PowerUp : MonoBehaviour, ISpawnable
             case "shields":
             case "Player":
                 {
-                    Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-                    if (player != null)
-                        player.ActivatePowerUp(this);
-
+                    PlayerCollectionManager pcm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollectionManager>();
+                    if (pcm != null)
+                        pcm.ActivatePowerUp(this);
 
                     _sounds["collect"].Play();
                     SelfDestroy();
