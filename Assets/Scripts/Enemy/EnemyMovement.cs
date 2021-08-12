@@ -21,6 +21,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     public CameraBounds cameraBounds = null;
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
+    public float Speed { get => _speed; set => _speed = value; }
 
     void Start()
     {
@@ -83,11 +84,6 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
         }
     }
 
-    public void OverrideSpeed(float newSpeed)
-    {
-        _speed = newSpeed;
-    }
-
     private void Dodge()
     {
         if (_target.Engage(new string[] { "laser", "deathRay", "torpedo" }, Vector2.down))
@@ -102,12 +98,12 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
 
     private void RamIntoPlayer()
     {
-
-        if (transform.position.y > _playerTransform.position.y
+        
+        if (_playerTransform != null && transform.position.y > _playerTransform.position.y
             && Vector3.Distance(transform.position, _playerTransform.position) < 6)
         {
             Vector3 dir = _playerTransform.position - transform.position;
-            StartCoroutine(Drift(dir, _speed * 0.06f, 0.3f));
+            StartCoroutine(Drift(dir, _speed * 0.03f, 0.3f));
         }
 
     }

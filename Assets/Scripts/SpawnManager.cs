@@ -8,7 +8,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer, _powerUpContainer, _asteroidContainer;
 
     [SerializeField]
-    private GameObject _enemyPrefab, _asteroidPrefab;
+    private GameObject _enemyPrefab, _asteroidPrefab, _fighterPrefab;
 
     [SerializeField]
     private List<GameObject> _powerUpPrefabs;
@@ -52,7 +52,7 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    IEnumerator SpawnEnemy(float rate, GameObject enemyPrefab)
+    IEnumerator SpawnEnemy(float rate, GameObject _enemyPrefab)
     {
         while (isSpawningEnemiesOverride)
         {
@@ -64,8 +64,12 @@ public class SpawnManager : MonoBehaviour
 
                 else
                 {
-                    _position.x = Random.Range(_enemy.SpawnLimit.XMin, _enemy.SpawnLimit.XMax);
-                    Instantiate(enemyPrefab, _position, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
+                    GameObject type = _enemyPrefab;
+                    if (CanSpawnFighter())
+                        type = _fighterPrefab;
+
+                    _position.x = Random.Range(type.GetComponent<EnemyMovement>().SpawnLimit.XMin, type.GetComponent<EnemyMovement>().SpawnLimit.XMax);
+                    Instantiate(type, _position, Quaternion.identity).transform.SetParent(_enemyContainer.transform);
                     yield return new WaitForSeconds(rate);
                 }
             }
@@ -73,6 +77,12 @@ public class SpawnManager : MonoBehaviour
             else
                 yield return null;
         }
+    }
+
+    private bool CanSpawnFighter()
+    {
+        return _enemyContainer.transform.GetComponentInChildren<Fighter>() == null
+            && Random.Range(0f, 1f) <= _lvl.fighterSpawnProbability;
     }
 
     IEnumerator SpawnPowerUps(float minRate, float maxRate, GameObject powerUp)

@@ -13,9 +13,11 @@ public class Enemy : MonoBehaviour
     private AudioSource[] _sources;
 
     public Animator animator;
-    public Dictionary<string, AudioSource> _sounds;
+    public Dictionary<string, AudioSource> sounds;
     public LvlManager lvlManager;
     public EnemyMovement movement;
+
+    public int Lives { get => _lives; set => _lives = value; }
 
     void Start()
     {
@@ -24,11 +26,11 @@ public class Enemy : MonoBehaviour
         movement = GetComponent<EnemyMovement>();
 
         _sources = GetComponents<AudioSource>();
-        _sounds = new Dictionary<string, AudioSource>()
+        sounds = new Dictionary<string, AudioSource>()
         {
             ["collision"] = _sources[0],
             ["explosion"] = _sources[1],
-            ["laser"] = _sources[2],
+            ["laser"] = _sources[2]
         };
 
         lvlManager = GameObject.Find("LevelManager").GetComponent<LvlManager>();
@@ -40,7 +42,7 @@ public class Enemy : MonoBehaviour
     private void EnemyDamageBase()
     {
         _lives--;
-        _sounds["collision"].Play();
+        sounds["collision"].Play();
         if (_lives < 0)
             EnemyDeath();
     }
@@ -72,7 +74,9 @@ public class Enemy : MonoBehaviour
             case "torpedo":
                 {
                     _lives--;
-                    goto case "laser";
+                    collision.GetComponent<Torpedo>().Destruct();
+                    EnemyKill();
+                    break;
                 }
             case "laser":
                 {
@@ -113,8 +117,8 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("onEnemyDeath");
         movement.cameraBounds.CameraShake();
         GetComponent<Collider2D>().enabled = false;
-        movement.OverrideSpeed(3f);
-        _sounds["explosion"].Play();
+        movement.Speed = 3f;
+        sounds["explosion"].Play();
         SelfDestroy(clips[0].length);
     }
 

@@ -16,6 +16,8 @@ public class EnemyShooting : MonoBehaviour
     private Enemy _enemy;
     private EnemyTargetingSystem _targeting;
 
+    public bool IsShooting { get => _isShooting; set => _isShooting = value; }
+
     void Start()
     {
         _enemy = GetComponent<Enemy>();
@@ -36,23 +38,25 @@ public class EnemyShooting : MonoBehaviour
 
             Vector2 direction = Vector2.down;
             if (_targeting.Engage(new string[] { "Player", "shields", "PowerUp" }, direction))
-                LaserShooting(direction);
+                Shooting(direction, _laser, _enemy.sounds["laser"]);
 
             direction = Vector2.up;
             if (_targeting.Engage(new string[] { "Player", "shields" }, direction))
-                LaserShooting(direction);
+                Shooting(direction, _laser, _enemy.sounds["laser"]);
 
         }
     }
 
-    private void LaserShooting(Vector2 direction)
+    public GameObject Shooting(Vector2 direction, GameObject shot, AudioSource audio)
     {
         Vector2 laserSpawn = transform.position;
         laserSpawn.y += _targeting.YOffset(direction);
-        GameObject enemyLaser = Instantiate(_laser, laserSpawn, Quaternion.identity);
+        GameObject enemyLaser = Instantiate(shot, laserSpawn, Quaternion.identity);
         foreach (var las in enemyLaser.GetComponentsInChildren<Laser>())
             las.SetEnemyLaser(direction);
 
-        _enemy._sounds["laser"].Play();
+        audio.Play();
+        return enemyLaser;
     }
+
 }

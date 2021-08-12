@@ -22,7 +22,7 @@ public class LvlManager : MonoBehaviour
     public float fighterSpawnProbability;
     public float fighterSpeed;
     public float fighterTorpedoRate;
-    public float fighterLives;
+    public int fighterLives;
 
     public float[] powerUpSpawnRate = new float[2];
     public float[] asteroidSpawnRate = new float[2];

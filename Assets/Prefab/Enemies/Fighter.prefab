@@ -15,9 +15,12 @@ GameObject:
   - component: {fileID: 2376495220074847856}
   - component: {fileID: 9054147442983023966}
   - component: {fileID: 2809439767455582042}
+  - component: {fileID: 2642365995804306779}
   - component: {fileID: 1793609086275859574}
   - component: {fileID: 1437535678659502818}
   - component: {fileID: 5191344400606898594}
+  - component: {fileID: 971812476359867750}
+  - component: {fileID: 4509729493366756976}
   - component: {fileID: -5613689927967404813}
   m_Layer: 0
   m_Name: Fighter
@@ -420,6 +423,102 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &2642365995804306779
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 8401456349c492a489ed90469e317e43, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!60 &1793609086275859574
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -680,7 +779,34 @@ MonoBehaviour:
   _isOscillating: 0
   _phase: 0
   _speed: 0
+  _dodgeProbability: 0
   cameraBounds: {fileID: 0}
+--- !u!114 &971812476359867750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e737c6d1ada634ab03eba40a956996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isShooting: 1
+  _laser: {fileID: 2959102916945858817, guid: 8a656c049a803a9479f5e9b5a008c9de, type: 3}
+--- !u!114 &4509729493366756976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29109e167b86b1144b08c85d100c4bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-5613689927967404813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,3 +819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf2e1df04e91da4da9f9b13b54e14eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 6
+  _fireRate: 0.2
+  _defaultFireRate: 0.2
+  _torpedoPrefab: {fileID: 1620099141931234, guid: 248aee824083cee41827664f689a8b79, type: 3}

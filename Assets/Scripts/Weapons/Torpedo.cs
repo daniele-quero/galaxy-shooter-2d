@@ -38,7 +38,11 @@ public class Torpedo : MonoBehaviour
         if (!_isInitialSprint)
         {
             if (_isEnemy)
-                SeekTarget(GameObject.Find("Player").transform);
+            {
+                GameObject player = GameObject.Find("Player");
+                if (player != null)
+                    SeekTarget(player.transform);
+            }
             else
                 SeekTarget(IdentifyCloserEnemy());
         }
@@ -122,6 +126,11 @@ public class Torpedo : MonoBehaviour
     private IEnumerator SelfDestruct()
     {
         yield return new WaitForSeconds(5f);
+        Destruct();
+    }
+
+    public void Destruct()
+    {
         _outOfTime = true;
         Animator animator = GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;

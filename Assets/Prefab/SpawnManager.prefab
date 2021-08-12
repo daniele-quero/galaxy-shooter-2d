@@ -44,21 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e1652e05935c9408fa1a8504836c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyRate: 5
-  _powerUpRateMin: 4
-  _powerUpRateMax: 8
-  _asteroidRateMin: 8
-  _asteroidRateMax: 10
-  _ammoRate: 5
-  _1upRateMin: 15
-  _1upRateMax: 20
-  _deathRayRateMin: 20
-  _deathRayRateMax: 25
   _enemyContainer: {fileID: 0}
   _powerUpContainer: {fileID: 0}
   _asteroidContainer: {fileID: 0}
   _enemyPrefab: {fileID: 4130679818690967717, guid: 5a724cd844e43b64087621434b8dcb02, type: 3}
   _asteroidPrefab: {fileID: 5492634125526921129, guid: 55486588de001834cb28c291b40678f5, type: 3}
+  _fighterPrefab: {fileID: 533439585119705737, guid: 42d79e5cc6dfbae4f88055f362bfdc2f, type: 3}
   _powerUpPrefabs:
   - {fileID: 7187496278690652434, guid: 23fe3ae6d10fc3f48ba6c72f629942cf, type: 3}
   - {fileID: 8572009904868777411, guid: 594be9db18cf65a4e93d5e7010d7583d, type: 3}

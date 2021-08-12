@@ -182,8 +182,10 @@ public class Player : MonoBehaviour
         {
             case "enemyTorpedo":
                 {
-                    Damage(1, collision.transform.position.x);
-                    goto case "enemyLaser";
+                    Damage(2, collision.transform.position.x);
+                    collision.GetComponent<Torpedo>().Destruct();
+                    psm.sounds["damage"].Play();
+                    break;
                 }
             case "enemyLaser":
                 Damage(1, collision.transform.position.x);

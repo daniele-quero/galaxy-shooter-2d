@@ -107,7 +107,9 @@ public class Asteroid : MonoBehaviour, ISpawnable
             case "torpedo":
                 {
                     _lives--;
-                    goto case "laser";
+                    collision.GetComponent<Torpedo>().Destruct();
+                    AsteroidDamage();
+                    break;
                 }
             case "laser":
                 {
