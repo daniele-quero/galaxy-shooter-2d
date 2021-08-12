@@ -599,7 +599,7 @@ MonoBehaviour:
   - 5
   enemySpawnRate: 5.5
   enemyOscillationProbability: 0.7
-  enemyDodgeProbability: 0.5
+  enemyDodgeProbability: 0.35
   enemyScore: 15
   enemyLives: 1
   isEnemyShooting: 1
