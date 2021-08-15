@@ -194,6 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 303285183}
   - component: {fileID: 303285182}
+  - component: {fileID: 303285184}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -215,22 +216,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   killTarget: 20
   enemySpeed: 4
-  enemyLaserSpeed: -10
+  enemyLaserSpeed: 10
   enemyOscillationFrequency: 1.2
   enemyOscillationAmplitude: 0.03
   enemyLaserRate:
-  - 0.5
-  - 5
+  - 1
+  - 4
   enemySpawnRate: 5.5
   enemyOscillationProbability: 0.7
-  enemyDodgeProbability: 0.4
-  enemyScore: 15
+  enemyDodgeProbability: 0.35
+  enemyScore: 20
   enemyLives: 1
   isEnemyShooting: 1
-  fighterSpawnProbability: 0.5
-  fighterSpeed: 3
+  fighterSpawnProbability: 0.6
+  fighterSpeed: 4
   fighterTorpedoRate: 3
-  fighterLives: 2
+  fighterLives: 3
   powerUpSpawnRate:
   - 6
   - 8
@@ -261,6 +262,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &303285184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303285181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cf587539f49a324da6334bf5339efa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bossPrefab: {fileID: 3668267490447256610, guid: 1834bc6e23eda4c49997283e3b9d6fa3, type: 3}
 --- !u!1 &488671458
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,7 +523,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
       propertyPath: _speed
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
       propertyPath: _angSpeed
@@ -521,7 +535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
       propertyPath: _direction.y
-      value: 0
+      value: -0.4
       objectReference: {fileID: 0}
     - target: {fileID: 281787032661319439, guid: 55486588de001834cb28c291b40678f5, type: 3}
       propertyPath: isFreeToMove

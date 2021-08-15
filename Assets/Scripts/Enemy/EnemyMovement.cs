@@ -7,8 +7,9 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
 {
     [SerializeField]
     private bool _isOscillating = false;
+    private bool _recycle = true;
 
-    [SerializeField]
+
     private float _phase, _speed, _dodgeProbability;
 
     private Enemy _enemy;
@@ -22,6 +23,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
 
     public SpawnLimit SpawnLimit { get => CalculateSpawnLimits(); }
     public float Speed { get => _speed; set => _speed = value; }
+    public bool Recycle { get => _recycle; set => _recycle = value; }
 
     void Start()
     {
@@ -42,7 +44,6 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
             Utilities.LogNullGrabbed("Camera");
 
         _playerTransform = GameObject.Find("Player").transform;
-
     }
 
     void Update()
@@ -76,11 +77,18 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     {
         _spawnLimit = SpawnLimit;
 
-        if (transform.position.y <= _spawnLimit.YMin && _enemy.animator.GetCurrentAnimatorStateInfo(0).IsName("enemy_ok"))
+        if (_recycle)
         {
-            _respawnPosition.y = _spawnLimit.YMax;
-            _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
-            transform.position = _respawnPosition;
+            if (transform.position.y <= _spawnLimit.YMin && _enemy.animator.GetCurrentAnimatorStateInfo(0).IsName("enemy_ok"))
+            {
+                _respawnPosition.y = _spawnLimit.YMax;
+                _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
+                transform.position = _respawnPosition;
+            }
+        }
+        else
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 
@@ -98,7 +106,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
 
     private void RamIntoPlayer()
     {
-        
+
         if (_playerTransform != null && transform.position.y > _playerTransform.position.y
             && Vector3.Distance(transform.position, _playerTransform.position) < 6)
         {

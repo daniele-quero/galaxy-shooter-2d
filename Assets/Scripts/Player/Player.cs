@@ -112,19 +112,7 @@ public class Player : MonoBehaviour
         foreach (var eng in engines)
             GameObject.Destroy(eng);
 
-        pm.Speed = 0;
-
-        Animator animator = GetComponent<Animator>();
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
-        Utilities.CheckNullGrabbed(animator, "Player Animator");
-
-        cameraBounds.CameraShake();
-        animator.SetTrigger("onPlayerDeath");
-        GetComponent<Collider2D>().enabled = false;
-        psm.sounds["explosion"].Play();
-        GameObject.Destroy(this.gameObject, clips[0].length);
+        GetComponent<Explosion>().Explode("onPlayerDeath", psm.sounds["explosion"], cameraBounds);
         _lvlManager.PlayerPrefClear();
     }
 
@@ -165,7 +153,12 @@ public class Player : MonoBehaviour
         if (Score < 0)
             Score = 0;
 
+        int max = PlayerPrefs.GetInt("MaxScore", 0);
+        max = Score > max ? score : max;
+
         PlayerPrefs.SetInt("Score", Score);
+        PlayerPrefs.SetInt("MaxScore", max);
+
         uiman.UpdateScoreText(Score);
     }
 

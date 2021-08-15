@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     public EnemyMovement movement;
 
     public int Lives { get => _lives; set => _lives = value; }
+    public int ScoreValue { get => _scoreValue; set => _scoreValue = value; }
 
     void Start()
     {
@@ -109,26 +110,9 @@ public class Enemy : MonoBehaviour
 
     public void EnemyDeath()
     {
-        if (name.Contains("Fighter"))
-            transform.localScale *= 2f;
 
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
-        animator.SetTrigger("onEnemyDeath");
-        movement.cameraBounds.CameraShake();
-        GetComponent<Collider2D>().enabled = false;
-        movement.Speed = 3f;
-        sounds["explosion"].Play();
-        SelfDestroy(clips[0].length);
-    }
-
-    private void SelfDestroy()
-    {
-        GameObject.Destroy(this.gameObject);
-    }
-
-    private void SelfDestroy(float time)
-    {
-        GameObject.Destroy(this.gameObject, time);
+        Explosion[] expls = GetComponentsInChildren<Explosion>();
+        foreach (var e in expls)
+            e.Explode("onEnemyDeath", sounds["explosion"]);
     }
 }

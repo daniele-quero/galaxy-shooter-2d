@@ -12,8 +12,22 @@ public class EnemyTargetingSystem : MonoBehaviour
     public bool Engage(string[] otherTags, Vector2 direction)
     {
         Vector2 origin = transform.position;
-        origin.y += YOffset(direction) * 2;
-        RaycastHit2D hit = Physics2D.BoxCast(origin, _enemy.movement.SpawnLimit.Off * 2, 0f, direction, 100f);
+        origin += Offset(direction) * 2f;
+        return Engage(otherTags, direction, origin);
+    }
+
+    public bool Engage(string[] otherTags, Vector2 direction, Vector2 origin)
+    {
+        Vector2 offset;
+        if (name.Contains("Boss"))
+        {
+            offset = GetComponent<BossMovement>().SpawnLimit.Off;
+            offset.x *= 0.5f;
+        }
+        else
+            offset = _enemy.movement.SpawnLimit.Off;
+
+        RaycastHit2D hit = Physics2D.BoxCast(origin, offset * 2, 0f, direction, 100f);
 
         if (hit.collider != null)
         {
@@ -25,8 +39,13 @@ public class EnemyTargetingSystem : MonoBehaviour
         return false;
     }
 
-    public float YOffset(Vector2 direction)
+    public Vector2 Offset(Vector2 direction)
     {
-        return direction.y * _enemy.movement.SpawnLimit.YOff;
+        Vector2 offset;
+        if (name.Contains("Boss"))
+            offset = GetComponent<BossMovement>().SpawnLimit.Off;
+        else
+            offset = _enemy.movement.SpawnLimit.Off;
+        return Mathf.Abs(Vector2.Dot(offset, direction)) * direction;
     }
 }

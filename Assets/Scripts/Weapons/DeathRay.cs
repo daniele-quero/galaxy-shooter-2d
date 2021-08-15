@@ -22,6 +22,7 @@ public class DeathRay : MonoBehaviour
             _nextTime = Time.time + _hitRate;
             switch (collision.tag)
             {
+                case "boss":
                 case "enemy":
                     collision.GetComponent<Enemy>().EnemyKill(true);
                     break;

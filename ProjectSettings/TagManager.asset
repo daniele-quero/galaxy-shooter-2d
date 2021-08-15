@@ -26,6 +26,7 @@ TagManager:
   - torpedo
   - enemyTorpedo
   - torpedoPowerUp
+  - boss
   layers:
   - Default
   - TransparentFX

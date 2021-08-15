@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 971812476359867750}
   - component: {fileID: 4509729493366756976}
   - component: {fileID: -5613689927967404813}
+  - component: {fileID: -2215504389762964899}
   m_Layer: 0
   m_Name: Fighter
   m_TagString: enemy
@@ -793,7 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e737c6d1ada634ab03eba40a956996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isShooting: 1
+  _isShooting: 0
   _laser: {fileID: 2959102916945858817, guid: 8a656c049a803a9479f5e9b5a008c9de, type: 3}
 --- !u!114 &4509729493366756976
 MonoBehaviour:
@@ -822,3 +823,15 @@ MonoBehaviour:
   _speed: 6
   _torpedoRate: 0
   _torpedoPrefab: {fileID: 1620099141931234, guid: 248aee824083cee41827664f689a8b79, type: 3}
+--- !u!114 &-2215504389762964899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e8600697c681243a62d3acdfbc9076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

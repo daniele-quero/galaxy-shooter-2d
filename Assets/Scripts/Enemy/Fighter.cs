@@ -44,7 +44,7 @@ public class Fighter : MonoBehaviour
         GetComponent<EnemyMovement>().Speed = _speed;
         GetComponent<EnemyShooting>().IsShooting = true;
         _enemy.Lives = _enemy.lvlManager.fighterLives;
-
+        _enemy.ScoreValue *= 2;
         _enemy.sounds.Add("torpedo", GetComponents<AudioSource>()[3]);
 
     }

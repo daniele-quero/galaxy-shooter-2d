@@ -66,6 +66,13 @@ public class LvlManager : MonoBehaviour
         GameObject.Destroy(GameObject.Find("EnemyContainer"));
         GameObject.Destroy(GameObject.Find("SpawnManager"));
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(scene + 1);
+
+        if (scene + 1 < SceneManager.sceneCount)
+            SceneManager.LoadScene(scene + 1);
+        else
+        {
+            GameObject.Find("Canvas").GetComponent<UIManager>().Victory();
+            GameObject.Find("Player").GetComponent<Collider2D>().enabled = false;
+        }
     }
 }

@@ -16,6 +16,8 @@ public class Torpedo : MonoBehaviour
     private CameraBounds _cameraBounds = null;
     private GameObject _enemyContainer;
 
+    public float Speed { get => _speed; set => _speed = value; }
+
     void Start()
     {
         PutInContainer();
@@ -42,6 +44,8 @@ public class Torpedo : MonoBehaviour
                 GameObject player = GameObject.Find("Player");
                 if (player != null)
                     SeekTarget(player.transform);
+                else
+                    SeekTarget(null);
             }
             else
                 SeekTarget(IdentifyCloserEnemy());
@@ -59,10 +63,15 @@ public class Torpedo : MonoBehaviour
 
     public void SetEnemyTorpedo()
     {
+        SetEnemyTorpedo(Vector2.down);
+    }
+
+    public void SetEnemyTorpedo(Vector2 dir)
+    {
         tag = "enemyTorpedo";
         _isEnemy = true;
         StopCoroutine(InitialSprint(Vector2.up));
-        StartCoroutine(InitialSprint(Vector2.down));
+        StartCoroutine(InitialSprint(dir));
     }
 
     private Transform IdentifyCloserEnemy()
@@ -132,17 +141,7 @@ public class Torpedo : MonoBehaviour
     public void Destruct()
     {
         _outOfTime = true;
-        Animator animator = GetComponent<Animator>();
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-        GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessingManager>().ExplosionBloom(clips[0].length);
-        Utilities.CheckNullGrabbed(animator, "Torpedo Animator");
-
-        animator.SetTrigger("onTimeOut");
-        _speed *= 0.6f;
-        GetComponent<Collider2D>().enabled = false;
-        GetComponent<AudioSource>().Play();
-        GameObject.Destroy(this.gameObject, clips[0].length);
+        GetComponent<Explosion>().Explode("onTimeOut", GetComponent<AudioSource>());
     }
 
 }

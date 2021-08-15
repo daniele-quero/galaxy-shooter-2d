@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
         _boundOffset = 1f;
 
     private CameraBounds _cameraBounds = null;
-
+    private Vector3 _direction = Vector3.up;
     private GameObject _laserContainer = null;
     void Start()
     {
@@ -39,7 +39,7 @@ public class Laser : MonoBehaviour
 
     private void Move()
     {
-        transform.Translate(Vector3.up* _speed * Time.deltaTime);
+        transform.Translate(_direction * _speed * Time.deltaTime, Space.World);
     }
 
     private void RemoveFarLasers()
@@ -53,10 +53,7 @@ public class Laser : MonoBehaviour
     public void SetEnemyLaser(Vector2 direction)
     {
         this.tag = "enemyLaser";
-        
-        if(Vector2.down.Equals(direction))
-            _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
-        else
-            _speed = -GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
+        _speed = GameObject.Find("LevelManager").GetComponent<LvlManager>().enemyLaserSpeed;
+        _direction = direction;
     }
 }

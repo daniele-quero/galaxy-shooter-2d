@@ -591,21 +591,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   killTarget: 15
   enemySpeed: 4
-  enemyLaserSpeed: -10
+  enemyLaserSpeed: 10
   enemyOscillationFrequency: 1.2
   enemyOscillationAmplitude: 0.03
   enemyLaserRate:
-  - 0.5
+  - 1
   - 5
   enemySpawnRate: 5.5
   enemyOscillationProbability: 0.7
-  enemyDodgeProbability: 0.35
+  enemyDodgeProbability: 0.25
   enemyScore: 15
   enemyLives: 1
   isEnemyShooting: 1
   fighterSpawnProbability: 0.3
   fighterSpeed: 3
-  fighterTorpedoRate: 3
+  fighterTorpedoRate: 4
   fighterLives: 2
   powerUpSpawnRate:
   - 6

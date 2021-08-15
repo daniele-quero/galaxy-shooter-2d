@@ -91,12 +91,21 @@ public class UIManager : MonoBehaviour
             _livesDisplay.sprite = _livesSprite[livesLeft];
 
         else if (livesLeft < 0)
-        {
-            _livesDisplay.enabled = false;
-            StartCoroutine(GameOverFlick());
-            _restart.enabled = true;
-            _isGameOver = true;
-        }
+            GameOverUI();
+    }
+
+    private void GameOverUI()
+    {
+        _livesDisplay.enabled = false;
+        StartCoroutine(GameOverFlick());
+        _restart.enabled = true;
+        _isGameOver = true;
+    }
+
+    public void Victory()
+    {
+        _gameover.text = "YOU WIN!!";
+        GameOverUI();
     }
 
     private IEnumerator GameOverFlick()
@@ -141,7 +150,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void ActivateShieldBarActivation()
-    {  
+    {
         _shieldBar.SetActive(true);
     }
 

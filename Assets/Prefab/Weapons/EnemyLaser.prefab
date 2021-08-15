@@ -87,6 +87,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser
       objectReference: {fileID: 0}
+    - target: {fileID: 7935000803135252688, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935000803135252688, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
 --- !u!4 &3885101605745118858 stripped
@@ -148,6 +156,18 @@ PrefabInstance:
     - target: {fileID: 5761331309826155082, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
       propertyPath: m_Name
       value: Laser (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935000803135252688, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935000803135252688, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935000803135252688, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
+      propertyPath: m_Color.r
+      value: 0.0014921427
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ed229e0e806c404a89b3d018fc8660b, type: 3}
