@@ -108,7 +108,7 @@ public class Torpedo : MonoBehaviour
     private void RemoveFarTorpedo()
     {
         Vector2 min = new Vector2(-_cameraBounds.CameraVisual.x, -_cameraBounds.CameraVisual.y);
-        Vector2 size = new Vector2(_cameraBounds.CameraVisual.x, _cameraBounds.CameraVisual.y) * 2;
+        Vector2 size = new Vector2(_cameraBounds.CameraVisual.x, _cameraBounds.CameraVisual.y) * 2.1f;
         Rect field = new Rect(min, size);
 
         if (!field.Contains(transform.position))
