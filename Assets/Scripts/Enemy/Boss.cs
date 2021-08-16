@@ -6,6 +6,7 @@ public class Boss : MonoBehaviour
 {
     private Enemy _enemy;
     private int _bossLives = 49;
+    private bool _isAngry = false;
 
     public int BossLives { get => _bossLives; set => _bossLives = value; }
 
@@ -15,6 +16,12 @@ public class Boss : MonoBehaviour
         OverrideEnemyValues();
     }
 
+    private void Update()
+    {
+        if (!_isAngry && _enemy.Lives <= _bossLives/2)
+            AngryMode();
+    }
+
     public void OverrideEnemyValues()
     {
         _enemy.Lives = _bossLives;
@@ -22,4 +29,13 @@ public class Boss : MonoBehaviour
         _enemy.sounds.Add("torpedo", GetComponents<AudioSource>()[3]);
     }
 
+    private void AngryMode()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        GetComponent<EnemyShooting>().LaserRateMin *= 0.75f;
+        GetComponent<EnemyShooting>().LaserRateMax *= 0.75f;
+        GetComponent<BossShootingSystem>().TorpedoSpeed += 0.6f;
+        GetComponent<BossShootingSystem>().TorpedoRate -= 0.5f;
+        _isAngry = true;
+    }
 }

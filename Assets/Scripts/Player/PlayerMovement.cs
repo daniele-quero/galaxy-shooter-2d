@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public PlayerInputManager pim;
     private Player _player;
+    private TiltManeuver _tilt;
 
     [SerializeField]
     private Vector3 _direction = Vector3.zero;
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
         pim = GetComponent<PlayerInputManager>();
         _player = GetComponent<Player>();
+        _tilt = GetComponent<TiltManeuver>();
     }
 
     void Update()
@@ -42,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _direction.x = pim.xAxis;
         _direction.y = pim.yAxis;
-
+        //_tilt.Tilt(_direction.x);
         transform.Translate(_direction * Time.deltaTime * Speed);
     }
 

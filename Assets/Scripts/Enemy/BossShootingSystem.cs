@@ -13,7 +13,7 @@ public class BossShootingSystem : MonoBehaviour
     private Player _player;
 
     [SerializeField]
-    private float _torpedoSpeed = 7f;
+    private float _torpedoSpeed = 7f, _torpedoRate = 3f;
 
     private Enemy _enemy;
     private Collider2D _collider;
@@ -22,6 +22,9 @@ public class BossShootingSystem : MonoBehaviour
 
     [SerializeField]
     private bool _isLaunching = true;
+
+    public float TorpedoSpeed { get => _torpedoSpeed; set => _torpedoSpeed = value; }
+    public float TorpedoRate { get => _torpedoRate; set => _torpedoRate = value; }
 
     void Start()
     {
@@ -40,7 +43,7 @@ public class BossShootingSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         while (_player != null)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(_torpedoRate);
             if(_isLaunching)
             {
                 int l1 = Random.Range(0, 4);
