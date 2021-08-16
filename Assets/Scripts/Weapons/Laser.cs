@@ -5,8 +5,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 6f,
-        _boundOffset = 1f;
+    private float _speed = 6f;
 
     private CameraBounds _cameraBounds = null;
     private Vector3 _direction = Vector3.up;
@@ -27,10 +26,10 @@ public class Laser : MonoBehaviour
             else
                 this.transform.SetParent(_laserContainer.transform);
         }
-            
+
     }
 
-    
+
     void Update()
     {
         Move();
@@ -44,9 +43,16 @@ public class Laser : MonoBehaviour
 
     private void RemoveFarLasers()
     {
-        if(transform.position.y >= _cameraBounds.CameraVisual.y + _boundOffset)
+        Vector2 min = new Vector2(-_cameraBounds.CameraVisual.x, -_cameraBounds.CameraVisual.y);
+        Vector2 size = new Vector2(_cameraBounds.CameraVisual.x, _cameraBounds.CameraVisual.y) * 2.1f;
+        Rect field = new Rect(min, size);
+
+        if (!field.Contains(transform.position))
         {
-            GameObject.Destroy(this.gameObject);
+            if (transform.parent.tag.Contains("enemy"))
+                GameObject.Destroy(transform.parent.gameObject);
+            else
+                GameObject.Destroy(this.gameObject);
         }
     }
 
