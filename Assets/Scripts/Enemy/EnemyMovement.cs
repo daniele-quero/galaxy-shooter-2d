@@ -18,6 +18,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     private Vector3 _respawnPosition = new Vector3(0, 0, 0);
     private SpriteRenderer _spriteRenderer;
     private Transform _playerTransform;
+    private TiltManeuver _tilt;
 
     public CameraBounds cameraBounds = null;
 
@@ -29,7 +30,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     {
         _enemy = GetComponent<Enemy>();
         _target = GetComponent<EnemyTargetingSystem>();
-
+        _tilt = GetComponent<TiltManeuver>();
         _dodgeProbability = _enemy.lvlManager.enemyDodgeProbability;
         _speed = _enemy.lvlManager.enemySpeed;
         _phase = Random.value;
@@ -70,17 +71,20 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     {
         float a = _enemy.lvlManager.enemyOscillationAmplitude;
         float w = _enemy.lvlManager.enemyOscillationFrequency;
-        transform.Translate(Vector3.right * a * Mathf.Sin(w * Time.time + _phase * Mathf.PI));
+        float sin = Mathf.Sin(w * Time.time + _phase * Mathf.PI);
+        _tilt.Tilt(sin);
+        transform.Translate(Vector3.right * a * sin);
     }
 
     public void RespawnAtTop()
     {
         _spawnLimit = SpawnLimit;
-
+        
         if (_recycle)
         {
             if (transform.position.y <= _spawnLimit.YMin && _enemy.animator.GetCurrentAnimatorStateInfo(0).IsName("enemy_ok"))
             {
+                transform.localRotation = Quaternion.identity;
                 _respawnPosition.y = _spawnLimit.YMax;
                 _respawnPosition.x = Random.Range(_spawnLimit.XMin, _spawnLimit.XMax);
                 transform.position = _respawnPosition;

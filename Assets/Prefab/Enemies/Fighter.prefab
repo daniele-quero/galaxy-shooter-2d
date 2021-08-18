@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 4509729493366756976}
   - component: {fileID: -5613689927967404813}
   - component: {fileID: -2215504389762964899}
+  - component: {fileID: 7567114421354882211}
+  - component: {fileID: -7518870260540992117}
   m_Layer: 0
   m_Name: Fighter
   m_TagString: enemy
@@ -778,9 +780,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOscillating: 0
-  _phase: 0
-  _speed: 0
-  _dodgeProbability: 0
   cameraBounds: {fileID: 0}
 --- !u!114 &971812476359867750
 MonoBehaviour:
@@ -795,6 +794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isShooting: 0
+  _isPaused: 0
   _laser: {fileID: 2959102916945858817, guid: 8a656c049a803a9479f5e9b5a008c9de, type: 3}
 --- !u!114 &4509729493366756976
 MonoBehaviour:
@@ -835,3 +835,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e8600697c681243a62d3acdfbc9076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7567114421354882211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d74508f4e4533044b803cc150c55718a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _angle: 35
+--- !u!1818360608 &-7518870260540992117
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533439585119705737}
+  m_Enabled: 1
+  m_Weight: 0
+  m_TranslationAtRest: {x: 5, y: -6.1, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 0
+  m_AffectTranslationY: 0
+  m_AffectTranslationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 536199171725194297}
+    weight: 1

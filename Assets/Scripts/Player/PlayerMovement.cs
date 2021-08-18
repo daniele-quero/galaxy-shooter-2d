@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _direction.x = pim.xAxis;
         _direction.y = pim.yAxis;
-        //_tilt.Tilt(_direction.x);
+        _tilt.Tilt(_direction.x);
         transform.Translate(_direction * Time.deltaTime * Speed);
     }
 

@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 7234140239421755973}
   - component: {fileID: 7234140239421755974}
   - component: {fileID: 7234140239421755970}
+  - component: {fileID: 7965712851137962135}
+  - component: {fileID: -852972047281271458}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -861,6 +863,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7965712851137962135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7234140239421755965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d74508f4e4533044b803cc150c55718a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _angle: 35
+--- !u!1818360608 &-852972047281271458
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7234140239421755965}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: -5.1, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 0
+  m_AffectTranslationY: 0
+  m_AffectTranslationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 7234140239421755963}
+    weight: 1
 --- !u!1 &7234140239479833100
 GameObject:
   m_ObjectHideFlags: 0
