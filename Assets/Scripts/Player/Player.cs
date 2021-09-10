@@ -67,11 +67,6 @@ public class Player : MonoBehaviour
             SetEngineFire(transform.position.x + 1);
     }
 
-    void Update()
-    {
-
-    }
-
     public void Damage(int dmg, float x)
     {
         if (!HasShields)

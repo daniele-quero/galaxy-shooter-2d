@@ -72,7 +72,7 @@ public class PlayerCollectionManager : MonoBehaviour
                         break;
                     }
 
-                    Shields shields = Instantiate(_player.shieldPrefab, this.transform.position, Quaternion.identity)
+                    Shields shields = Instantiate(_player.shieldPrefab, this.transform.position, _player.transform.rotation)
                         .GetComponent<Shields>();
                     shields.SetOwner(transform, "Shields");
                     _player.HasShields = true;

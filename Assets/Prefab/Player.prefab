@@ -884,7 +884,7 @@ PositionConstraint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7234140239421755965}
   m_Enabled: 1
-  m_Weight: 1
+  m_Weight: 0
   m_TranslationAtRest: {x: 0, y: -5.1, z: 0}
   m_TranslationOffset: {x: 0, y: 0, z: 0}
   m_AffectTranslationX: 0

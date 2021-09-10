@@ -18,7 +18,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     private Vector3 _respawnPosition = new Vector3(0, 0, 0);
     private SpriteRenderer _spriteRenderer;
     private Transform _playerTransform;
-    private TiltManeuver _tilt;
+    //private TiltManeuver _tilt;
 
     public CameraBounds cameraBounds = null;
 
@@ -30,7 +30,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
     {
         _enemy = GetComponent<Enemy>();
         _target = GetComponent<EnemyTargetingSystem>();
-        _tilt = GetComponent<TiltManeuver>();
+        //_tilt = GetComponent<TiltManeuver>();
         _dodgeProbability = _enemy.lvlManager.enemyDodgeProbability;
         _speed = _enemy.lvlManager.enemySpeed;
         _phase = Random.value;
@@ -72,7 +72,7 @@ public class EnemyMovement : MonoBehaviour, ISpawnable
         float a = _enemy.lvlManager.enemyOscillationAmplitude;
         float w = _enemy.lvlManager.enemyOscillationFrequency;
         float sin = Mathf.Sin(w * Time.time + _phase * Mathf.PI);
-        _tilt.Tilt(sin);
+        //_tilt.Tilt(sin);
         transform.Translate(Vector3.right * a * sin);
     }
 
